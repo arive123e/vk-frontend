@@ -3,15 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <title>VK Авторизация</title>
-    <!-- Подключаем VKID SDK — сначала -->
+    <!-- Подключаем VKID SDK -->
     <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
 </head>
 <body>
     <h1>Добро пожаловать!</h1>
 
-    <!-- Далее твой код авторизации -->
+    <!-- ЖЁСТКАЯ ПРОВЕРКА: Показываем в консоли, что такое VKID через 2 секунды -->
     <script>
-        window.onload = function () {
+        setTimeout(() => {
+            if (typeof VKID === 'undefined') {
+                console.error('VKID: НЕ найден! Проблема с загрузкой SDK');
+            } else {
+                console.log('VKID: найден, вот объект:', VKID);
+            }
+        }, 2000);
+    </script>
+
+    <!-- Код авторизации VKID -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
             // Проверка: загрузился ли SDK?
             if (typeof VKID !== 'undefined') {
                 console.log("VKID SDK успешно загружен!");
@@ -27,7 +38,7 @@
                 // Создание и рендер кнопки OneTap
                 const oneTap = new VKID.OneTap();
                 oneTap.render({
-                    container: document.body, // Можно вставить div с id, если не хочешь прямо в body
+                    container: document.body,
                     scheme: VKID.Scheme.LIGHT,
                     lang: VKID.Languages.RUS,
                     styles: {
@@ -37,7 +48,7 @@
             } else {
                 console.error("VKID SDK не загружен!");
             }
-        }
+        });
     </script>
 </body>
 </html>

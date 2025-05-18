@@ -3,19 +3,30 @@
   <head>
     <meta charset="UTF-8">
     <title>VK Авторизация</title>
+    <!-- Подключаем SDK VK -->
     <script src="https://vk.com/js/api/openapi.js?169"></script>
   </head>
   <body>
     <h1>Добро пожаловать!</h1>
+    <!-- Контейнер для кнопки VK -->
     <div id="vk_id_sdk_one_tap"></div>
     <script>
-  VK.init({apiId: 53336238}); // <-- твой app_id
-  VK.Widgets.Auth("vk_id_sdk_one_tap", {
-    width: 300,
-    onAuth: function(data) {
-      alert('Успех! Вас зовут ' + data.first_name);
-    }
-  });
-   </script>
+      window.onload = function() {
+        // Проверяем, что SDK загрузился
+        if (typeof VK !== "undefined") {
+          // Инициализируем VK SDK с твоим app_id
+          VK.init({apiId: 53336238});
+          // Рисуем кнопку авторизации
+          VK.Widgets.Auth("vk_id_sdk_one_tap", {
+            width: 300,
+            onAuth: function(data) {
+              alert('Успех! Вас зовут ' + data.first_name);
+            }
+          });
+        } else {
+          alert("VK SDK не загрузился! Попробуйте обновить страницу или отключить блокировщики.");
+        }
+      }
+    </script>
   </body>
 </html>

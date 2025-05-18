@@ -1,36 +1,28 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <title>VK Авторизация</title>
+    <meta charset="UTF-8">
+    <title>VK Авторизация</title>
 </head>
 <body>
-  <h1>Добро пожаловать!</h1>
-  <div id="vk_id_sdk_one_tap"></div>
-
-  <script>
-    // Загружаем SDK VK динамически
-    let vkScript = document.createElement('script');
-    vkScript.src = "https://vk.com/js/api/openapi.js?169";
-    vkScript.async = true;
-
-    vkScript.onload = function() {
-      // Инициализация после загрузки SDK
-      VK.init({ apiId: 53336238 });
-      VK.Widgets.Auth("vk_id_sdk_one_tap", {
-        width: 300,
-        onAuth: function(data) {
-          alert('Успех! Вас зовут ' + data.first_name);
+    <h1>Добро пожаловать!</h1>
+    <div id="vk-id-widget"></div>
+    <script src="https://unpkg.com/@vkid/sdk@3.0.0/dist/sdk.umd/index.js"></script>
+    <script>
+        if (typeof VKIDSDK !== 'undefined') {
+            const oneTap = new VKIDSDK.OneTap({
+                clientId: 53336238, // <-- твой ID приложения
+                redirectUrl: 'https://www.fokusnikaltair.xyz', // <-- твой домен
+                language: 'ru',
+                mode: 'popup',
+                targetId: 'vk-id-widget',
+            });
+            oneTap.mount();
+        } else {
+            console.error('VKIDSDK не загружен');
         }
-      });
-    };
-
-    vkScript.onerror = function() {
-      alert("Ошибка загрузки VK SDK!");
-    };
-
-    document.head.appendChild(vkScript);
-  </script>
+    </script>
 </body>
 </html>
+
 

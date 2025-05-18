@@ -2,53 +2,20 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>VK Авторизация</title>
-    <!-- Подключаем VKID SDK -->
-    <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+    <title>CDN test: jQuery вместо VKID</title>
+    <!-- Подключаем jQuery с CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
 </head>
 <body>
-    <h1>Добро пожаловать!</h1>
-
-    <!-- ЖЁСТКАЯ ПРОВЕРКА: Показываем в консоли, что такое VKID через 2 секунды -->
+    <h1>Тест загрузки jQuery с CDN</h1>
     <script>
-        setTimeout(() => {
-            if (typeof VKID === 'undefined') {
-                console.error('VKID: НЕ найден! Проблема с загрузкой SDK');
+        setTimeout(function() {
+            if (typeof $ !== 'undefined') {
+                console.log('jQuery подгрузился!');
             } else {
-                console.log('VKID: найден, вот объект:', VKID);
+                console.error('jQuery НЕ загрузился!');
             }
         }, 2000);
-    </script>
-
-    <!-- Код авторизации VKID -->
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            // Проверка: загрузился ли SDK?
-            if (typeof VKID !== 'undefined') {
-                console.log("VKID SDK успешно загружен!");
-
-                // Инициализация VKID
-                VKID.Config.init({
-                    app: 53336238, // Твой ID приложения VK
-                    redirectUrl: 'https://www.fokusnikaltair.xyz',
-                    responseMode: 'query',
-                    scope: 'email' // добавь, если нужен email
-                });
-
-                // Создание и рендер кнопки OneTap
-                const oneTap = new VKID.OneTap();
-                oneTap.render({
-                    container: document.body,
-                    scheme: VKID.Scheme.LIGHT,
-                    lang: VKID.Languages.RUS,
-                    styles: {
-                        borderRadius: 8
-                    }
-                });
-            } else {
-                console.error("VKID SDK не загружен!");
-            }
-        });
     </script>
 </body>
 </html>

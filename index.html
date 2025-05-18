@@ -9,12 +9,13 @@
     <h1>Добро пожаловать!</h1>
     <div id="vk_id_sdk_one_tap"></div>
     <script>
-      VK.Widgets.Auth("vk_id_sdk_one_tap", {
-        width: 300,
-        onAuth: function(data) {
-          alert('Успех! Вас зовут ' + data.first_name);
-        }
-      });
-    </script>
+  VK.init({apiId: 53336238}); // <-- твой app_id
+  VK.Widgets.Auth("vk_id_sdk_one_tap", {
+    width: 300,
+    onAuth: function(data) {
+      alert('Успех! Вас зовут ' + data.first_name);
+    }
+  });
+   </script>
   </body>
 </html>

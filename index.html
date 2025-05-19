@@ -3,54 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <title>VK Авторизация — Виджет 3-в-1</title>
-    <!-- VKID SDK с официального CDN -->
+    <!-- VKID SDK -->
     <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
 </head>
 <body>
     <h1>Добро пожаловать!</h1>
-    <!-- Место под кнопку (или можешь изменить id) -->
     <div id="vkid_container"></div>
-
     <script>
-        // Даем время SDK на загрузку
         setTimeout(function () {
-            if (typeof VKID !== 'undefined') {
-                console.log('VKID SDK успешно загружен!');
-
-                // 1. Инициализация SDK
+            if (typeof VKID === 'undefined') {
+                console.error('VKID SDK НЕ загружен! Виджет не отрисован.');
+            } else {
+                // Пробуем отрисовать виджет 3-в-1
                 VKID.Config.init({
-                    app: 53336238, // Твой ID приложения
-                    redirectUrl: 'https://www.fokusnikaltair.xyz', // свой домен
-                    responseMode: 'query', // или 'fragment', см. доки
-                    scope: 'email', // если нужен email
-                    source: VKID.ConfigSource.LOWCODE, // обязательно для 3-в-1
+                    app: 53336238,
+                    redirectUrl: 'https://www.fokusnikaltair.xyz',
+                    responseMode: 'query',
+                    scope: 'email'
                 });
-
-                // 2. Рендер виджета 3-в-1 (OneTap)
-                const oneTap = new VKID.OneTap();
-                oneTap.render({
+                const widget = new VKID.Widget3in1();
+                widget.render({
                     container: document.getElementById('vkid_container'),
-                    showAlternativeLogin: true, // включает ОК + почту
                     scheme: VKID.Scheme.LIGHT,
                     lang: VKID.Languages.RUS,
                     styles: { borderRadius: 8 }
                 });
-
-                // 3. Ловим успешную авторизацию
-                oneTap.on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, function(payload) {
-                    // payload.code и payload.device_id — отправь их на сервер
-                    console.log('Успешная авторизация:', payload);
-                });
-
-                // 4. Ловим ошибку
-                oneTap.on(VKID.WidgetEvents.ERROR, function(error) {
-                    console.error('Ошибка VKID:', error);
-                });
-
-            } else {
-                console.error('VKID SDK НЕ загружен! Виджет не отрисован.');
+                console.log('Виджет 3-в-1 должен быть отрисован');
             }
-        }, 1500);
+        }, 1000); // Жёсткая задержка для загрузки SDK
     </script>
 </body>
 </html>

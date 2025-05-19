@@ -2,20 +2,33 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>CDN test: jQuery вместо VKID</title>
-    <!-- Подключаем jQuery с CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <title>VK Авторизация</title>
+    <!-- ОФИЦИАЛЬНОЕ подключение VKID SDK через jsDelivr CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
 </head>
 <body>
-    <h1>Тест загрузки jQuery с CDN</h1>
+    <h1>Добро пожаловать!</h1>
     <script>
-        setTimeout(function() {
-            if (typeof $ !== 'undefined') {
-                console.log('jQuery подгрузился!');
+        setTimeout(() => {
+            if (typeof VKID !== 'undefined') {
+                console.log("VKID SDK успешно загружен!");
+                VKID.Config.init({
+                    app: 53336238,
+                    redirectUrl: 'https://www.fokusnikaltair.xyz',
+                    responseMode: 'query',
+                    scope: 'email'
+                });
+                const oneTap = new VKID.OneTap();
+                oneTap.render({
+                    container: document.body,
+                    scheme: VKID.Scheme.LIGHT,
+                    lang: VKID.Languages.RUS,
+                    styles: { borderRadius: 8 }
+                });
             } else {
-                console.error('jQuery НЕ загрузился!');
+                console.error("VKID SDK НЕ загружен! Проверь подключение через jsDelivr CDN.");
             }
-        }, 2000);
+        }, 1000);
     </script>
 </body>
 </html>

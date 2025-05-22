@@ -31,20 +31,20 @@
       function vkidOnSuccess(data) {
         // Можно сохранить токен, если потребуется: localStorage.setItem('vk_token', JSON.stringify(data));
         // Перенаправление на страницу успеха
-        window.location.href = '/success.html';
+        window.location.href = 'https://vk-backend-w0we.onrender.com/success.html';
       }
 
       function vkidOnError(error) {
         // Можно вывести ошибку в консоль, если нужно
         // console.error('Ошибка VKID', error);
         // Перенаправление на страницу ошибки
-        window.location.href = '/error.html';
+        window.location.href = 'https://vk-backend-w0we.onrender.com/error.html';
       }
     }
 
     // Для раздела помощи — если нужно добавить отдельную кнопку "Помощь":
     function goToHelp() {
-      window.location.href = '/help.html';
+      window.location.href = 'https://vk-backend-w0we.onrender.com/help.html';
     }
   </script>
   <!-- Если хочешь кнопку помощи прямо тут -->

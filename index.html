@@ -27,16 +27,26 @@
           .then(vkidOnSuccess)
           .catch(vkidOnError);
       });
-    
+
       function vkidOnSuccess(data) {
-        // Обработка полученного результата
-        console.log('Успех!', data);
+        // Можно сохранить токен, если потребуется: localStorage.setItem('vk_token', JSON.stringify(data));
+        // Перенаправление на страницу успеха
+        window.location.href = '/success.html';
       }
-    
+
       function vkidOnError(error) {
-        // Обработка ошибки
-        console.error('Ошибка VKID', error);
+        // Можно вывести ошибку в консоль, если нужно
+        // console.error('Ошибка VKID', error);
+        // Перенаправление на страницу ошибки
+        window.location.href = '/error.html';
       }
     }
+
+    // Для раздела помощи — если нужно добавить отдельную кнопку "Помощь":
+    function goToHelp() {
+      window.location.href = '/help.html';
+    }
   </script>
+  <!-- Если хочешь кнопку помощи прямо тут -->
+  <!-- <button onclick="goToHelp()" style="margin-top:20px;">🔮 Нужна помощь?</button> -->
 </div>

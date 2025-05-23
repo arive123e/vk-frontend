@@ -1,3 +1,39 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>VK Авторизация — Виджет 3-в-1</title>
+    <!-- VKID SDK -->
+    <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+</head>
+<body>
+    <h1>Добро пожаловать!</h1>
+    <div id="vkid_container"></div>
+    <script>
+        setTimeout(function () {
+            if (typeof VKID === 'undefined') {
+                console.error('VKID SDK НЕ загружен! Виджет не отрисован.');
+            } else {
+                // Пробуем отрисовать виджет 3-в-1
+                VKID.Config.init({
+                    app: 53336238,
+                    redirectUrl: 'https://www.fokusnikaltair.xyz',
+                    responseMode: 'query',
+                    scope: 'email'
+                });
+                const widget = new VKID.Widget3in1();
+                widget.render({
+                    container: document.getElementById('vkid_container'),
+                    scheme: VKID.Scheme.LIGHT,
+                    lang: VKID.Languages.RUS,
+                    styles: { borderRadius: 8 }
+                });
+                console.log('Виджет 3-в-1 должен быть отрисован');
+            }
+        }, 1000); // Жёсткая задержка для загрузки SDK
+    </script>
+</body>
+</html>
 <div>
   <script src="https://unpkg.com/@vkid/sdk@<3.0.0/dist-sdk/umd/index.js"></script>
   <script type="text/javascript">
@@ -6,7 +42,7 @@
 
       VKID.Config.init({
         app: 53336238,
-        redirectUrl: 'https://vk-backend-w0we.onrender.com/auth/vk/callback',
+        redirectUrl: 'https://www.fokusnikaltair.xyz',
         responseMode: VKID.ConfigResponseMode.Callback,
         source: VKID.ConfigSource.LOWCODE,
         scope: '', // Заполните нужными доступами по необходимости
@@ -27,26 +63,16 @@
           .then(vkidOnSuccess)
           .catch(vkidOnError);
       });
-
+    
       function vkidOnSuccess(data) {
-        // Можно сохранить токен, если потребуется: localStorage.setItem('vk_token', JSON.stringify(data));
-        // Перенаправление на страницу успеха
-        window.location.href = 'https://vk-backend-w0we.onrender.com/success.html';
+        // Обработка полученного результата
+        console.log('Успех!', data);
       }
-
+    
       function vkidOnError(error) {
-        // Можно вывести ошибку в консоль, если нужно
-        // console.error('Ошибка VKID', error);
-        // Перенаправление на страницу ошибки
-        window.location.href = 'https://vk-backend-w0we.onrender.com/error.html';
+        // Обработка ошибки
+        console.error('Ошибка VKID', error);
       }
-    }
-
-    // Для раздела помощи — если нужно добавить отдельную кнопку "Помощь":
-    function goToHelp() {
-      window.location.href = 'https://vk-backend-w0we.onrender.com/help.html';
     }
   </script>
-  <!-- Если хочешь кнопку помощи прямо тут -->
-  <!-- <button onclick="goToHelp()" style="margin-top:20px;">🔮 Нужна помощь?</button> -->
 </div>

@@ -1,52 +1,52 @@
-<div>
-  <script src="https://unpkg.com/@vkid/sdk@<3.0.0/dist-sdk/umd/index.js"></script>
-  <script type="text/javascript">
-    if ('VKIDSDK' in window) {
-      const VKID = window.VKIDSDK;
-
-      VKID.Config.init({
-        app: 53336238,
-        redirectUrl: 'https://vk-backend-w0we.onrender.com/auth/vk/callback',
-        responseMode: VKID.ConfigResponseMode.Callback,
-        source: VKID.ConfigSource.LOWCODE,
-        scope: '', // Заполните нужными доступами по необходимости
-      });
-
-      const oneTap = new VKID.OneTap();
-
-      oneTap.render({
-        container: document.currentScript.parentElement,
-        showAlternativeLogin: true
-      })
-      .on(VKID.WidgetEvents.ERROR, vkidOnError)
-      .on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, function (payload) {
-        const code = payload.code;
-        const deviceId = payload.device_id;
-
-        VKID.Auth.exchangeCode(code, deviceId)
-          .then(vkidOnSuccess)
-          .catch(vkidOnError);
-      });
-
-      function vkidOnSuccess(data) {
-        // Можно сохранить токен, если потребуется: localStorage.setItem('vk_token', JSON.stringify(data));
-        // Перенаправление на страницу успеха
-        window.location.href = 'https://vk-backend-w0we.onrender.com/success.html';
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>VK Авторизация</title>
+    <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+    <style>
+      body {
+        background: #0d122b;
+        color: #fff;
+        font-family: 'Montserrat', Arial, sans-serif;
+        text-align: center;
+        padding: 60px 20px;
       }
-
-      function vkidOnError(error) {
-        // Можно вывести ошибку в консоль, если нужно
-        // console.error('Ошибка VKID', error);
-        // Перенаправление на страницу ошибки
-        window.location.href = 'https://vk-backend-w0we.onrender.com/error.html';
+      .magic {
+        font-size: 2em;
+        color: #f9d923;
+        text-shadow: 0 0 12px #fff47a, 0 0 20px #a7c7e7;
+        margin-bottom: 40px;
       }
-    }
+    </style>
+</head>
+<body>
+    <div class="magic">Магический портал авторизации через VK</div>
+    <div id="vkid-container"></div>
+    <div id="result"></div>
 
-    // Для раздела помощи — если нужно добавить отдельную кнопку "Помощь":
-    function goToHelp() {
-      window.location.href = 'https://vk-backend-w0we.onrender.com/help.html';
-    }
-  </script>
-  <!-- Если хочешь кнопку помощи прямо тут -->
-  <!-- <button onclick="goToHelp()" style="margin-top:20px;">🔮 Нужна помощь?</button> -->
-</div>
+    <script>
+        // Получаем tg_id из адреса страницы (если есть)
+        const urlParams = new URLSearchParams(window.location.search);
+        const tg_id = urlParams.get('tg_id') || '';
+
+        VKID.Config.init({
+            app: 53336238,
+            redirectUrl: 'https://vk-backend-w0we.onrender.com/auth/vk/callback?tg_id=' + encodeURIComponent(tg_id),
+            responseMode: VKID.ConfigResponseMode.Callback,
+            source: VKID.ConfigSource.LOWCODE,
+            scope: '',
+        });
+
+        const oneTap = new VKID.OneTap();
+
+        oneTap.render({
+            container: document.getElementById('vkid-container'),
+            showAlternativeLogin: true,
+        })
+        .on(VKID.WidgetEvents.ERROR, (error) => {
+            document.getElementById('result').innerHTML = "<div style='color: red;'>Ошибка: " + error.message + "</div>";
+        });
+    </script>
+</body>
+</html>

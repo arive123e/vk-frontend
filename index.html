@@ -38,13 +38,13 @@
                 });
 
                 function vkidOnSuccess(data) {
-                    // Обработка полученного результата
-                    console.log('Успех!', data);
+                    // Редирект на страницу успеха после успешной авторизации
+                    window.location.href = "https://vk-backend-w0we.onrender.com/success.html";
                 }
 
                 function vkidOnError(error) {
-                    // Обработка ошибки
-                    console.error('Ошибка VKID', error);
+                    // Редирект на страницу ошибки при неудаче
+                    window.location.href = "https://vk-backend-w0we.onrender.com/error.html";
                 }
             } else {
                 console.error('VKID SDK НЕ загружен! Виджет не отрисован.');

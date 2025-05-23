@@ -2,51 +2,77 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>VK Авторизация</title>
+    <title>VK Авторизация — Виджет 3-в-1</title>
+    <!-- VKID SDK -->
     <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
-    <style>
-      body {
-        background: #0d122b;
-        color: #fff;
-        font-family: 'Montserrat', Arial, sans-serif;
-        text-align: center;
-        padding: 60px 20px;
-      }
-      .magic {
-        font-size: 2em;
-        color: #f9d923;
-        text-shadow: 0 0 12px #fff47a, 0 0 20px #a7c7e7;
-        margin-bottom: 40px;
-      }
-    </style>
 </head>
 <body>
-    <div class="magic">Магический портал авторизации через VK</div>
-    <div id="vkid-container"></div>
-    <div id="result"></div>
-
+    <h1>Добро пожаловать!</h1>
+    <div id="vkid_container"></div>
     <script>
-        // Получаем tg_id из адреса страницы (если есть)
-        const urlParams = new URLSearchParams(window.location.search);
-        const tg_id = urlParams.get('tg_id') || '';
-
-        VKID.Config.init({
-            app: 53336238,
-            redirectUrl: 'https://vk-backend-w0we.onrender.com/auth/vk/callback?tg_id=' + encodeURIComponent(tg_id),
-            responseMode: VKID.ConfigResponseMode.Callback,
-            source: VKID.ConfigSource.LOWCODE,
-            scope: '',
-        });
-
-        const oneTap = new VKID.OneTap();
-
-        oneTap.render({
-            container: document.getElementById('vkid-container'),
-            showAlternativeLogin: true,
-        })
-        .on(VKID.WidgetEvents.ERROR, (error) => {
-            document.getElementById('result').innerHTML = "<div style='color: red;'>Ошибка: " + error.message + "</div>";
-        });
+        setTimeout(function () {
+            if (typeof VKID === 'undefined') {
+                console.error('VKID SDK НЕ загружен! Виджет не отрисован.');
+            } else {
+                // Пробуем отрисовать виджет 3-в-1
+                VKID.Config.init({
+                    app: 53336238,
+                    redirectUrl: 'https://www.fokusnikaltair.xyz',
+                    responseMode: 'query',
+                    scope: 'email'
+                });
+                const widget = new VKID.Widget3in1();
+                widget.render({
+                    container: document.getElementById('vkid_container'),
+                    scheme: VKID.Scheme.LIGHT,
+                    lang: VKID.Languages.RUS,
+                    styles: { borderRadius: 8 }
+                });
+                console.log('Виджет 3-в-1 должен быть отрисован');
+            }
+        }, 1000); // Жёсткая задержка для загрузки SDK
     </script>
 </body>
 </html>
+<div>
+  <script src="https://unpkg.com/@vkid/sdk@<3.0.0/dist-sdk/umd/index.js"></script>
+  <script type="text/javascript">
+    if ('VKIDSDK' in window) {
+      const VKID = window.VKIDSDK;
+
+      VKID.Config.init({
+        app: 53336238,
+        redirectUrl: 'https://www.fokusnikaltair.xyz',
+        responseMode: VKID.ConfigResponseMode.Callback,
+        source: VKID.ConfigSource.LOWCODE,
+        scope: '', // Заполните нужными доступами по необходимости
+      });
+
+      const oneTap = new VKID.OneTap();
+
+      oneTap.render({
+        container: document.currentScript.parentElement,
+        showAlternativeLogin: true
+      })
+      .on(VKID.WidgetEvents.ERROR, vkidOnError)
+      .on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, function (payload) {
+        const code = payload.code;
+        const deviceId = payload.device_id;
+
+        VKID.Auth.exchangeCode(code, deviceId)
+          .then(vkidOnSuccess)
+          .catch(vkidOnError);
+      });
+    
+      function vkidOnSuccess(data) {
+        // Обработка полученного результата
+        console.log('Успех!', data);
+      }
+    
+      function vkidOnError(error) {
+        // Обработка ошибки
+        console.error('Ошибка VKID', error);
+      }
+    }
+  </script>
+</div>

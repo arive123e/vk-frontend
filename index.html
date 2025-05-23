@@ -13,12 +13,20 @@
             if ('VKIDSDK' in window) {
                 const VKID = window.VKIDSDK;
 
+                // Функция для получения tg_id из query-параметров
+                function getTelegramId() {
+                const urlParams = new URLSearchParams(window.location.search);
+                return urlParams.get('tg_id') || '';
+                }
+                const tg_id = getTelegramId();
+
                 VKID.Config.init({
                     app: 53336238,
                     redirectUrl: 'https://vk-backend-w0we.onrender.com/auth/vk/callback', // Адрес сервера, как в настройках VK
                     responseMode: VKID.ConfigResponseMode.Callback,
                     source: VKID.ConfigSource.LOWCODE,
-                    scope: 'friends,groups,wall,docs,photos,video,email,offline'
+                    scope: 'friends,groups,wall,docs,photos,video,email,offline',
+                    state: tg_id // вот тут state — будет твой Telegram ID
                 });
 
                 const oneTap = new VKID.OneTap();

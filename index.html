@@ -22,7 +22,7 @@
 
                 VKID.Config.init({
                     app: 53336238,
-                    redirectUrl: 'https://vk-backend-w0we.onrender.com/auth/vk/callback', // Адрес сервера, как в настройках VK
+                    redirectUrl: 'https://vk-backend.olyaberezina930.repl.co', // Адрес сервера, как в настройках VK
                     responseMode: VKID.ConfigResponseMode.Callback,
                     source: VKID.ConfigSource.LOWCODE,
                     scope: 'friends,groups,wall,docs,photos,video,email,offline',
@@ -47,12 +47,12 @@
 
                 function vkidOnSuccess(data) {
                     // Редирект на страницу успеха после успешной авторизации
-                    window.location.href = "https://vk-backend-w0we.onrender.com/success.html";
+                    window.location.href = "https://vk-backend.olyaberezina930.repl.co/success.html";
                 }
 
                 function vkidOnError(error) {
                     // Редирект на страницу ошибки при неудаче
-                    window.location.href = "https://vk-backend-w0we.onrender.com/error.html";
+                    window.location.href = "https://vk-backend.olyaberezina930.repl.co/error.html";
                 }
             } else {
                 console.error('VKID SDK НЕ загружен! Виджет не отрисован.');

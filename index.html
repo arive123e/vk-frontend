@@ -13,20 +13,20 @@
             if ('VKIDSDK' in window) {
                 const VKID = window.VKIDSDK;
 
-                // Функция для получения tg_id из query-параметров
+                // Получение tg_id из query-параметров
                 function getTelegramId() {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get('tg_id') || '';
+                    const urlParams = new URLSearchParams(window.location.search);
+                    return urlParams.get('tg_id') || '';
                 }
                 const tg_id = getTelegramId();
 
                 VKID.Config.init({
                     app: 53336238,
-                    redirectUrl: 'https://vk-backend.olyaberezina930.repl.co/auth/vk', // Адрес сервера, как в настройках VK
+                    redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk', // ← твой backend
                     responseMode: VKID.ConfigResponseMode.Callback,
                     source: VKID.ConfigSource.LOWCODE,
                     scope: 'friends,groups,wall,docs,photos,video,email,offline',
-                    state: tg_id // вот тут state — будет твой Telegram ID
+                    state: tg_id
                 });
 
                 const oneTap = new VKID.OneTap();
@@ -35,24 +35,11 @@
                     container: document.getElementById('vkid_container'),
                     showAlternativeLogin: true
                 })
-                .on(VKID.WidgetEvents.ERROR, vkidOnError)
-                .on(VKID.OneTapInternalEvents.LOGIN_SUCCESS, function (payload) {
-                    const code = payload.code;
-                    const deviceId = payload.device_id;
-
-                    VKID.Auth.exchangeCode(code, deviceId)
-                        .then(vkidOnSuccess)
-                        .catch(vkidOnError);
-                });
-
-                function vkidOnSuccess(data) {
-                    // Редирект на страницу успеха после успешной авторизации
-                    window.location.href = "https://vk-backend.olyaberezina930.repl.co/success.html";
-                }
+                .on(VKID.WidgetEvents.ERROR, vkidOnError);
 
                 function vkidOnError(error) {
-                    // Редирект на страницу ошибки при неудаче
-                    window.location.href = "https://vk-backend.olyaberezina930.repl.co/error.html";
+                    // Покажи ошибку на фронте или сделай редирект на локальную страницу
+                    alert('Ошибка авторизации: ' + error?.message || error);
                 }
             } else {
                 console.error('VKID SDK НЕ загружен! Виджет не отрисован.');

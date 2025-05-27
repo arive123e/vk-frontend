@@ -19,6 +19,10 @@
                     return urlParams.get('tg_id') || '';
                 }
                 const tg_id = getTelegramId();
+                
+                // === 🔍 ДОБАВЛЕННЫЕ ЛОГИ ДЛЯ ПРОВЕРКИ ===
+                console.log("🟢 VKID redirectUrl:", 'https://api.fokusnikaltair.xyz/auth/vk/callback');
+                console.log("🟢 VKID state (tg_id):", tg_id);
 
                 VKID.Config.init({
                     app: 53336238,

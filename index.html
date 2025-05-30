@@ -41,6 +41,14 @@
                 })
                 .on(VKID.WidgetEvents.ERROR, vkidOnError);
 
+                <a 
+                  href="https://api.fokusnikaltair.xyz/auth/vk"
+                  style="display: inline-block; background-color: #07f; color: white; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-family: sans-serif; font-size: 16px;"
+                >
+                  🔑 Войти через VK (без SDK)
+                </a>
+
+
                 function vkidOnError(error) {
                     // Покажи ошибку на фронте или сделай редирект на локальную страницу
                     alert('Ошибка авторизации: ' + error?.message || error);

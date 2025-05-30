@@ -1,0 +1,9 @@
+{
+  "redirects": [
+    {
+      "source": "/(.*)",
+      "destination": "https://api.fokusnikaltair.xyz/$1",
+      "permanent": true
+    }
+  ]
+}

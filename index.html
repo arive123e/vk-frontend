@@ -38,9 +38,13 @@
                 
                 const oneTap = new VKID.OneTap();
 
+                const container = document.getElementById('VkIdSdkOneTap');
+
+                if (container) {
                 oneTap.render({
-                    container: document.getElementById('vkid_container'),
-                    showAlternativeLogin: true
+                    container,
+                    styles: {
+                    height: 40,
                 })
                 .on(VKID.WidgetEvents.ERROR, vkidOnError);
 

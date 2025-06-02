@@ -32,7 +32,7 @@
       // 🔧 Инициализация SDK с PKCE
       VKID.Config.init({
         app: 53336238,
-        redirectUrl: window.location.href.split('?')[0], // ⛔ без query-параметров!
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', 
         scope: 'friends,groups,wall,docs,photos,video,email,offline',
         state: tg_id,
         options: {

@@ -7,54 +7,34 @@
 </head>
 <body>
     <h1>Добро пожаловать!</h1>
-    <!-- 🔹 Контейнер для VK SDK кнопки -->
-    <div id="vkid_container"></div>
-    
+    <!-- Контейнер для VK SDK кнопки. ИМЯ КАК В ДЕМО! -->
+    <div id="VkIdSdkOneTap"></div>
+
     <script>
-        setTimeout(function () {
-            if ('VKIDSDK' in window) {
-                const VKID = window.VKIDSDK;
+        // Проверяем, что SDK точно загрузился
+        if ('VKIDSDK' in window) {
+            const VKID = window.VKIDSDK;
 
-                // Получение tg_id из query-параметров
-                function getTelegramId() {
-                    const urlParams = new URLSearchParams(window.location.search);
-                    return urlParams.get('tg_id') || '';
-                }
-                const tg_id = getTelegramId();
-                
-                // === 🔍 Логи для проверки ===
-                console.log("🟢 VKID redirectUrl:", 'https://api.fokusnikaltair.xyz/auth/vk/callback');
-                console.log("🟢 VKID state (tg_id):", tg_id);
+            VKID.Config.init({
+                app: 53336238,
+                redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
+                scope: 'friends,groups,wall,docs,photos,video,email,offline'
+            });
 
-                VKID.Config.init({
-                    app: 53336238,
-                    redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
-                    responseMode: VKID.ConfigResponseMode.Callback,
-                    source: VKID.ConfigSource.LOWCODE,
-                    scope: 'friends,groups,wall,docs,photos,video,email,offline',
-                    state: tg_id,
-                    usePkce: true
-                });
-                
-                const oneTap = new VKID.OneTap();
+            const oneTap = new VKID.OneTap();
 
-                const container = document.getElementById('VkIdSdkOneTap');
-
-                if (container) {
+            const container = document.getElementById('VkIdSdkOneTap');
+            if (container) {
                 oneTap.render({
                     container,
                     styles: {
-                    height: 40,
-                })
-                .on(VKID.WidgetEvents.ERROR, vkidOnError);
-
-                function vkidOnError(error) {
-                    alert('Ошибка авторизации: ' + (error?.message || error));
-                }
-            } else {
-                console.error('VKID SDK НЕ загружен! Виджет не отрисован.');
+                        height: 40,
+                    },
+                });
             }
-        }, 2000); // задержка для загрузки SDK
+        } else {
+            console.error('VKID SDK НЕ загружен! Виджет не отрисован.');
+        }
     </script>
 </body>
 </html>

@@ -26,14 +26,6 @@
                 console.log("🟢 VKID redirectUrl:", 'https://api.fokusnikaltair.xyz/auth/vk/callback');
                 console.log("🟢 VKID state (tg_id):", tg_id);
 
-                VKID.Config.init({
-                    app: 53336238,
-                    redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // ← твой backend
-                    responseMode: VKID.ConfigResponseMode.Callback,
-                    source: VKID.ConfigSource.LOWCODE,
-                    scope: 'friends,groups,wall,docs,photos,video,email,offline',
-                    state: tg_id
-                });
                 // === ДОБАВЛЯЕМ PKCE ЯВНО! ===
                 VKID.Config.init({
                     app: 53336238,

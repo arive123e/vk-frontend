@@ -12,7 +12,7 @@
   <div id="VkIdSdkOneTap"></div>
 
   <script>
-    // ✨ Извлекаем tg_id из параметров строки запроса
+    // 🎯 Получаем Telegram ID из параметров URL
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
@@ -25,17 +25,19 @@
       throw new Error('tg_id обязателен');
     }
 
+    // 🚀 Проверка наличия SDK
     if ('VKIDSDK' in window) {
       const VKID = window.VKIDSDK;
 
+      // 🔧 Инициализация SDK с PKCE
       VKID.Config.init({
-        app: 53336238, // 🔑 ID приложения VK
-        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // 🚪 Без query!
+        app: 53336238,
+        redirectUrl: window.location.href.split('?')[0], // ⛔ без query-параметров!
         scope: 'friends,groups,wall,docs,photos,video,email,offline',
-        state: tg_id, // 📦 Передаём Telegram ID в state
+        state: tg_id,
         options: {
-          disableSilentAuth: true, // ❌ Не запускаем без нажатия
-          authType: 'code_legacy'
+          disableSilentAuth: true,
+          authType: 'pkce' // 🛡️ новый способ авторизации
         }
       });
 
@@ -45,9 +47,34 @@
       if (container) {
         oneTap.render({
           container,
-          styles: {
-            height: 40,
-          },
+          styles: { height: 40 },
+          events: {
+            onAuth: async (data) => {
+              console.log('🟢 Успешная авторизация:', data);
+
+              // 📦 Отправка данных на сервер
+              const response = await fetch('/auth/vk/save', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  access_token: data.token.access_token,
+                  user_id: data.token.user_id,
+                  email: data.token.email || null,
+                  tg_id: tg_id
+                })
+              });
+
+              if (response.ok) {
+                window.location.href = '/success.html';
+              } else {
+                window.location.href = '/error.html';
+              }
+            },
+            onError: (error) => {
+              console.error('❌ Ошибка авторизации:', error);
+              window.location.href = '/error.html';
+            }
+          }
         });
       }
     } else {

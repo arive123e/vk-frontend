@@ -7,8 +7,8 @@
 </head>
 <body>
     <h1>Добро пожаловать!</h1>
-     <!-- 🔹 Контейнер для VK SDK кнопки -->
-  <div id="vkid_container"></div>
+    <!-- 🔹 Контейнер для VK SDK кнопки -->
+    <div id="vkid_container"></div>
     
     <script>
         setTimeout(function () {
@@ -22,11 +22,10 @@
                 }
                 const tg_id = getTelegramId();
                 
-                // === 🔍 ДОБАВЛЕННЫЕ ЛОГИ ДЛЯ ПРОВЕРКИ ===
+                // === 🔍 Логи для проверки ===
                 console.log("🟢 VKID redirectUrl:", 'https://api.fokusnikaltair.xyz/auth/vk/callback');
                 console.log("🟢 VKID state (tg_id):", tg_id);
 
-                // === ДОБАВЛЯЕМ PKCE ЯВНО! ===
                 VKID.Config.init({
                     app: 53336238,
                     redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
@@ -34,7 +33,7 @@
                     source: VKID.ConfigSource.LOWCODE,
                     scope: 'friends,groups,wall,docs,photos,video,email,offline',
                     state: tg_id,
-                    usePkce: true // <<< 🔥 ВАЖНО: обязательно для PKCE!
+                    usePkce: true
                 });
                 
                 const oneTap = new VKID.OneTap();
@@ -46,13 +45,12 @@
                 .on(VKID.WidgetEvents.ERROR, vkidOnError);
 
                 function vkidOnError(error) {
-                    // Покажи ошибку на фронте или сделай редирект на локальную страницу
-                    alert('Ошибка авторизации: ' + error?.message || error);
+                    alert('Ошибка авторизации: ' + (error?.message || error));
                 }
             } else {
                 console.error('VKID SDK НЕ загружен! Виджет не отрисован.');
             }
-        }, 2000); // Жёсткая задержка для загрузки SDK
+        }, 2000); // задержка для загрузки SDK
     </script>
 </body>
 </html>

@@ -34,7 +34,28 @@
                     scope: 'friends,groups,wall,docs,photos,video,email,offline',
                     state: tg_id
                 });
+                // === ДОБАВЛЯЕМ PKCE ЯВНО! ===
+                VKID.Config.init({
+                    app: 53336238,
+                    redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
+                    responseMode: VKID.ConfigResponseMode.Callback,
+                    source: VKID.ConfigSource.LOWCODE,
+                    scope: 'friends,groups,wall,docs,photos,video,email,offline',
+                    state: tg_id,
+                    usePkce: true // <<< 🔥 ВАЖНО: обязательно для PKCE!
+                });
 
+                // Перехват события получения кода (для отладки — можно убрать позже)
+                VKID.Events.subscribe(VKID.Events.CODE_RECEIVED, (event) => {
+                    // В event.codeVerifier хранится code_verifier для PKCE
+                    if (event && event.codeVerifier) {
+                        sessionStorage.setItem('vk_code_verifier', event.codeVerifier);
+                        console.log('PKCE code_verifier сохранён:', event.codeVerifier);
+                    }
+                    // Показываем сам code
+                    console.log('VKID code:', event.code);
+                });
+                
                 const oneTap = new VKID.OneTap();
 
                 oneTap.render({

@@ -2,38 +2,38 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Магический вход через VK</title>
+  <title>Магический портал авторизации VK ID</title>
   <!-- 📦 VKID SDK -->
   <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
 </head>
 <body>
-  <h1>Вход через VK ID</h1>
+  <h1>Добро пожаловать!</h1>
   <div id="VkIdSdkOneTap"></div>
 
   <script>
-    // 🧙 Функция для извлечения параметров из URL
+    // ✨ Извлекаем tg_id из параметров строки запроса
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
     }
 
-    const tg_id = getQueryParam('tg_id'); // 🧠 Берём Telegram ID из URL
+    const tg_id = getQueryParam('tg_id');
 
     if (!tg_id) {
       document.body.innerHTML = '<p style="color:red;">❌ Ошибка: Telegram ID не передан!</p>';
-      throw new Error('tg_id is required');
+      throw new Error('tg_id обязателен');
     }
 
     if ('VKIDSDK' in window) {
       const VKID = window.VKIDSDK;
 
       VKID.Config.init({
-        app: 53336238,
-        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // 🔗 чистый редирект
+        app: 53336238, // 🔑 ID приложения VK
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // 🚪 Без query!
         scope: 'friends,groups,wall,docs,photos,video,email,offline',
-        state: tg_id, // 🧾 передаём Telegram ID в state
+        state: tg_id, // 📦 Передаём Telegram ID в state
         options: {
-          disableSilentAuth: true // ❌ отключаем авто-авторизацию
+          disableSilentAuth: true // ❌ Не запускаем без нажатия
         }
       });
 
@@ -44,12 +44,12 @@
         oneTap.render({
           container,
           styles: {
-            height: 40
-          }
+            height: 40,
+          },
         });
       }
     } else {
-      console.error('❌ VKID SDK НЕ загружен');
+      console.error('❌ VKID SDK не загружен');
     }
   </script>
 </body>

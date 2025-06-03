@@ -4,86 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Магический портал авторизации VK ID</title>
-  <!-- 📦 VKID SDK -->
-  <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+  <style>
+    body {
+      background: linear-gradient(120deg, #2c3e50 0%, #7f8c8d 100%);
+      color: #fff;
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      text-align: center;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .magic-btn {
+      background: #6c5ce7;
+      color: #fff;
+      border: none;
+      border-radius: 1em;
+      font-size: 1.1em;
+      padding: 0.7em 2.3em;
+      cursor: pointer;
+      margin-top: 2em;
+      box-shadow: 0 0 8px #fff5, 0 2px 12px #2d3436aa;
+      transition: background 0.2s;
+    }
+    .magic-btn:hover { background: #4834d4; }
+    .magic-title {
+      font-size: 2.2em;
+      margin-bottom: 0.2em;
+      letter-spacing: 0.04em;
+      text-shadow: 0 0 10px #8e44ad, 0 0 30px #16a08588;
+    }
+    .tip {
+      margin-top: 2em;
+      color: #d3c2ff;
+      font-size: 1em;
+      opacity: 0.8;
+    }
+  </style>
 </head>
 <body>
-  <h1>Добро пожаловать!</h1>
-  <div id="VkIdSdkOneTap"></div>
+  <!-- Магическая приветственная страничка -->
+  <div class="magic-title">Магический портал авторизации VK ID ✨</div>
+  <div>Для входа в сервис нажмите кнопку ниже и войдите через VK ID.</div>
+  <button class="magic-btn" onclick="startVKAuth()">Войти через VK ID</button>
+  <div class="tip">Данные будут защищены магией безопасности Фокусника Альтаира!</div>
 
   <script>
-    // 🎯 Получаем Telegram ID из query
+    // 🎯 Получаем Telegram ID из query (если нужно передавать)
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
     }
-
     const tg_id = getQueryParam('tg_id');
 
-    // ⛔ Проверка наличия Telegram ID
-    if (!tg_id) {
-      document.body.innerHTML = '<p style="color:red;">❌ Ошибка: Telegram ID не передан!</p>';
-      throw new Error('tg_id обязателен');
-    }
-
-    // ✅ Проверка и инициализация SDK
-    if ('VKIDSDK' in window) {
-      const VKID = window.VKIDSDK;
-
-      VKID.Config.init({
-        app: 53336238, // 🔑 ID твоего приложения
-        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // ❗️Без query
-        scope: 'friends,groups,wall,docs,photos,video,email,offline',
-        state: tg_id,
-        options: {
-          disableSilentAuth: true,
-          authType: 'pkce' // ✅ Безопасный способ
-        }
-      });
-
-      const oneTap = new VKID.OneTap();
-
-      // 📌 Рендер и обработка успешной авторизации
-      const container = document.getElementById('VkIdSdkOneTap');
-      if (container) {
-        oneTap.render({
-          container,
-          styles: { height: 40 },
-          events: {
-            onAuth: async (token) => {
-              console.log('✅ Успешная авторизация:', token);
-
-              try {
-                const response = await fetch('/auth/vk/save', {
-                  method: 'POST',
-                  headers: { 'Content-Type': 'application/json' },
-                  body: JSON.stringify({
-                    access_token: token.access_token,
-                    user_id: token.user_id,
-                    email: token.email || null,
-                    tg_id: tg_id
-                  })
-                });
-
-                if (response.ok) {
-                  window.location.href = '/success.html';
-                } else {
-                  window.location.href = '/error.html';
-                }
-              } catch (err) {
-                console.error('❌ Ошибка запроса:', err);
-                window.location.href = '/error.html';
-              }
-            },
-            onError: (error) => {
-              console.error('❌ Ошибка VK ID:', error);
-              window.location.href = '/error.html';
-            }
-          }
-        });
-      }
-    } else {
-      console.error('❌ VKID SDK не загружен');
+    function startVKAuth() {
+      // Формируем серверный URL авторизации (добавляем tg_id если надо)
+      let url = '/auth/vk';
+      if (tg_id) url += '?tg_id=' + encodeURIComponent(tg_id);
+      window.location.href = url; // Просто редиректим пользователя
     }
   </script>
 </body>

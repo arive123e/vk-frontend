@@ -12,7 +12,7 @@
   <div id="VkIdSdkOneTap"></div>
 
   <script>
-    // 🔍 Получаем значение параметра из строки запроса
+    // 🎯 Получаем Telegram ID из query
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
@@ -20,47 +20,47 @@
 
     const tg_id = getQueryParam('tg_id');
 
-    // ❗ Проверяем наличие Telegram ID
+    // ⛔ Проверка наличия Telegram ID
     if (!tg_id) {
       document.body.innerHTML = '<p style="color:red;">❌ Ошибка: Telegram ID не передан!</p>';
       throw new Error('tg_id обязателен');
     }
 
-    // ✅ Проверка и инициализация VKID SDK
+    // ✅ Проверка и инициализация SDK
     if ('VKIDSDK' in window) {
       const VKID = window.VKIDSDK;
 
       VKID.Config.init({
-        app: 53336238, // 🔑 ID твоего приложения VK ID
-        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // 🔐 Только без query!
+        app: 53336238, // 🔑 ID твоего приложения
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // ❗️Без query
         scope: 'friends,groups,wall,docs,photos,video,email,offline',
-        state: tg_id, // 📦 Telegram ID передаётся в state
+        state: tg_id,
         options: {
-          disableSilentAuth: true, // ❌ Без автологина
-          authType: 'pkce' // 🛡️ Безопасный способ авторизации
+          disableSilentAuth: true,
+          authType: 'pkce' // ✅ Безопасный способ
         }
       });
 
       const oneTap = new VKID.OneTap();
 
-      // 🔘 Рендерим кнопку и задаём коллбэки
+      // 📌 Рендер и обработка успешной авторизации
       const container = document.getElementById('VkIdSdkOneTap');
       if (container) {
         oneTap.render({
           container,
           styles: { height: 40 },
           events: {
-            onAuth: async (data) => {
-              console.log('✅ Успешная авторизация:', data);
+            onAuth: async (token) => {
+              console.log('✅ Успешная авторизация:', token);
 
               try {
                 const response = await fetch('/auth/vk/save', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: JSON.stringify({
-                    access_token: data.token.access_token,
-                    user_id: data.token.user_id,
-                    email: data.token.email || null,
+                    access_token: token.access_token,
+                    user_id: token.user_id,
+                    email: token.email || null,
                     tg_id: tg_id
                   })
                 });

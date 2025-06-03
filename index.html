@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!DOCTYPE html>More actions
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
@@ -12,7 +12,7 @@
   <div id="VkIdSdkOneTap"></div>
 
   <script>
-    // 🪄 Извлекаем Telegram ID из строки запроса
+    // 🎯 Получаем Telegram ID из параметров URL
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
@@ -25,58 +25,58 @@
       throw new Error('tg_id обязателен');
     }
 
+    // 🚀 Проверка наличия SDK
     if ('VKIDSDK' in window) {
       const VKID = window.VKIDSDK;
 
+      // 🔧 Инициализация SDK с PKCE
       VKID.Config.init({
         app: 53336238,
-        redirectUrl: window.location.href.split('?')[0],
+        redirectUrl: window.location.href.split('?')[0], // ⛔ без query-параметров!
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', 
         scope: 'friends,groups,wall,docs,photos,video,email,offline',
         state: tg_id,
         options: {
           disableSilentAuth: true,
-          authType: 'pkce'
+          authType: 'pkce' // 🛡️ новый способ авторизации
         }
       });
 
+      const oneTap = new VKID.OneTap();
+
       const container = document.getElementById('VkIdSdkOneTap');
-
       if (container) {
-        // ✅ Новый синтаксис — обработчик передаётся в OneTap({...})
-        const oneTap = new VKID.OneTap({
+        oneTap.render({
           container,
-          styles: {
-            height: 40,
-          },
-          onAuth: async (response) => {
-            console.log('✅ Успешная авторизация:', response);
+          styles: { height: 40 },
+          events: {
+            onAuth: async (data) => {
+              console.log('🟢 Успешная авторизация:', data);
 
-            try {
-              const result = await fetch('/auth/vk/save', {
+              // 📦 Отправка данных на сервер
+              const response = await fetch('/auth/vk/save', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                  access_token: response.accessToken,
-                  user_id: response.user.id,
-                  email: response.user.email,
-                  tg_id
+                  access_token: data.token.access_token,
+                  user_id: data.token.user_id,
+                  email: data.token.email || null,
+                  tg_id: tg_id
                 })
               });
 
-              if (result.ok) {
+              if (response.ok) {
                 window.location.href = '/success.html';
               } else {
-                alert('❌ Ошибка при сохранении токена на сервере');
+                window.location.href = '/error.html';
               }
-            } catch (err) {
-              console.error('❌ Ошибка запроса:', err);
-              alert('Не удалось сохранить токен');
+            },
+            onError: (error) => {
+              console.error('❌ Ошибка авторизации:', error);
+              window.location.href = '/error.html';
             }
           }
         });
-
-        // 🚀 Рендерим
-        oneTap.render();
       }
     } else {
       console.error('❌ VKID SDK не загружен');

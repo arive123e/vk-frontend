@@ -12,7 +12,7 @@
   <div id="VkIdSdkOneTap"></div>
 
   <script>
-    // ✨ Извлекаем tg_id из параметров строки запроса
+    // 🪄 Извлекаем Telegram ID из строки запроса
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(name);
@@ -20,53 +20,61 @@
 
     const tg_id = getQueryParam('tg_id');
 
+    // ⛔ Обязательно передавать tg_id
     if (!tg_id) {
       document.body.innerHTML = '<p style="color:red;">❌ Ошибка: Telegram ID не передан!</p>';
       throw new Error('tg_id обязателен');
     }
 
+    // 🔧 Проверка, что SDK загружен
     if ('VKIDSDK' in window) {
       const VKID = window.VKIDSDK;
 
+      // ⚙️ Инициализация VK ID
       VKID.Config.init({
-        app: 53336238,
-        redirectUrl: window.location.href.split('?')[0], // ⛔ убираем query!
+        app: 53336238, // 🔑 Твой VK ID Client ID
+        redirectUrl: window.location.href.split('?')[0], // ✅ Без query-параметров
         scope: 'friends,groups,wall,docs,photos,video,email,offline',
-        state: tg_id,
+        state: tg_id, // 📦 Передаём Telegram ID
         options: {
-          disableSilentAuth: true,
-          authType: 'pkce' // ✅ только PKCE
+          disableSilentAuth: true, // 🧷 Только ручной запуск
+          authType: 'pkce' // ✅ Только PKCE flow
         }
       });
 
+      // 🧲 Создаём OneTap и подключаем коллбек
       const oneTap = new VKID.OneTap();
 
-      oneTap.onAuth(async (response) => {
-        console.log('✅ Успешная авторизация:', response);
+      // ✅ Обработка успешной авторизации
+      oneTap.setOptions({
+        onAuth: async (response) => {
+          console.log('✅ Успешная авторизация:', response);
 
-        try {
-          const result = await fetch('/auth/vk/save', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              access_token: response.accessToken,
-              user_id: response.user.id,
-              email: response.user.email,
-              tg_id
-            })
-          });
+          try {
+            const result = await fetch('/auth/vk/save', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                access_token: response.accessToken,
+                user_id: response.user.id,
+                email: response.user.email,
+                tg_id
+              })
+            });
 
-          if (result.ok) {
-            window.location.href = '/success.html';
-          } else {
-            alert('Ошибка при сохранении токена');
+            if (result.ok) {
+              window.location.href = '/success.html';
+            } else {
+              alert('❌ Ошибка при сохранении токена на сервере');
+            }
+          } catch (err) {
+            console.error('❌ Ошибка запроса:', err);
+            alert('Не удалось сохранить токен');
           }
-        } catch (err) {
-          console.error('❌ Ошибка запроса:', err);
-          alert('Не удалось сохранить токен');
         }
       });
 
+      // 🚀 Рендерим кнопку
       const container = document.getElementById('VkIdSdkOneTap');
       if (container) {
         oneTap.render({

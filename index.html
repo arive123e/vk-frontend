@@ -2,11 +2,39 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Авторизация через VK ID</title>
+  <title>Фокусник Альтаир — Авторизация через VK ID</title>
+  <style>
+    .vkid-btn {
+      display: inline-flex;
+      align-items: center;
+      background: #5181B8;
+      color: #fff;
+      font-size: 1.1em;
+      border: none;
+      border-radius: 0.6em;
+      padding: 0.7em 2.3em;
+      cursor: pointer;
+      box-shadow: 0 2px 8px #5181B855;
+      transition: background 0.15s;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      letter-spacing: 0.02em;
+    }
+    .vkid-btn:hover {
+      background: #436f99;
+    }
+  </style>
 </head>
 <body>
-  <h1>Добро пожаловать!</h1>
-  <button onclick="goVKAuth()">Войти через VK ID</button>
+  <h1>Фокусник Альтаир</h1>
+  <p>Для работы сервиса нужна авторизация через VK ID:</p>
+  <button class="vkid-btn" onclick="goVKAuth()">
+    <svg width="24" height="24" fill="none" style="vertical-align:middle; margin-right:8px;">
+      <rect width="24" height="24" rx="12" fill="#5181B8"/>
+      <path d="M12 7c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 9c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" fill="#fff"/>
+      <path d="M13.2 10.7h-1.2V9.5h1.2v1.2zm0 3.8h-1.2v-2.8h1.2v2.8z" fill="#fff"/>
+    </svg>
+    Войти через VK ID
+  </button>
   <script>
     function getQueryParam(name) {
       const urlParams = new URLSearchParams(window.location.search);

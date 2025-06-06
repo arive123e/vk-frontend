@@ -3,48 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <title>Фокусник Альтаир — Авторизация через VK ID</title>
+  <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
   <style>
-    .vkid-btn {
-      display: inline-flex;
-      align-items: center;
-      background: #5181B8;
-      color: #fff;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 0.6em;
-      padding: 0.7em 2.3em;
-      cursor: pointer;
-      box-shadow: 0 2px 8px #5181B855;
-      transition: background 0.15s;
-      font-family: 'Segoe UI', Arial, sans-serif;
-      letter-spacing: 0.02em;
-    }
-    .vkid-btn:hover {
-      background: #436f99;
-    }
+    body { font-family: system-ui, sans-serif; padding: 40px; }
+    .wrap { max-width: 400px; margin: 0 auto; }
+    h1 { font-size: 2em; margin-bottom: 0.5em; }
+    #VkIdSdkOneTap { margin-top: 20px; }
+    .error { color: #c00; margin-top: 30px; }
   </style>
 </head>
 <body>
-  <h1>Фокусник Альтаир</h1>
-  <p>Для работы сервиса нужна авторизация через VK ID:</p>
-  <button class="vkid-btn" onclick="goVKAuth()">
-    <svg width="24" height="24" fill="none" style="vertical-align:middle; margin-right:8px;">
-      <rect width="24" height="24" rx="12" fill="#5181B8"/>
-      <path d="M12 7c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 9c-2.2 0-4-1.8-4-4s1.8-4 4-4 4 1.8 4 4-1.8 4-4 4z" fill="#fff"/>
-      <path d="M13.2 10.7h-1.2V9.5h1.2v1.2zm0 3.8h-1.2v-2.8h1.2v2.8z" fill="#fff"/>
-    </svg>
-    Войти через VK ID
-  </button>
+  <div class="wrap">
+    <h1>Фокусник Альтаир</h1>
+    <p>Для доступа к сервису авторизуйтесь через VK ID:</p>
+    <div id="VkIdSdkOneTap"></div>
+    <div id="error" class="error"></div>
+  </div>
   <script>
+    // Получаем Telegram ID из query (?tg_id=...)
     function getQueryParam(name) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name);
+      const params = new URLSearchParams(window.location.search);
+      return params.get(name);
     }
-    function goVKAuth() {
-      const tg_id = getQueryParam('tg_id');
-      let url = '/auth/vk';
-      if (tg_id) url += '?tg_id=' + encodeURIComponent(tg_id);
-      window.location.href = url;
+    const tg_id = getQueryParam('tg_id');
+    if (!tg_id) {
+      document.getElementById('error').textContent = 'Ошибка: Telegram ID не передан! Пожалуйста, перейдите по правильной ссылке из Telegram-бота.';
+      throw new Error('tg_id обязателен');
+    }
+    // Инициализация VK ID SDK One Tap
+    if ('VKIDSDK' in window) {
+      const VKID = window.VKIDSDK;
+      VKID.Config.init({
+        app: 53336238,
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // Твой редирект
+        state: tg_id, // Telegram ID, прилетит на backend в query/state
+        scope: 'groups', // по необходимости
+      });
+      const oneTap = new VKID.OneTap();
+      oneTap.render({ container: document.getElementById('VkIdSdkOneTap') });
+    } else {
+      document.getElementById('error').textContent = 'Ошибка загрузки VKID SDK!';
     }
   </script>
 </body>

@@ -1,19 +1,48 @@
-<!-- frontend/callback.html -->
 <!DOCTYPE html>
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
   <title>VK ID Callback</title>
   <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+  <style>
+    body { font-family: system-ui, sans-serif; padding: 40px; }
+    .center { max-width: 400px; margin: 40px auto; text-align: center; }
+    .error { color: #c00; margin-top: 20px; }
+    .success { color: #093; margin-top: 20px; }
+  </style>
 </head>
 <body>
-  <p>Завершаем авторизацию VK ID...</p>
+  <div class="center">
+    <h2>Завершаем авторизацию VK ID...</h2>
+    <div id="result"></div>
+  </div>
   <script>
-    if ('VKIDSDK' in window) {
-      window.VKIDSDK.Callback.process();
-    } else {
-      document.body.innerHTML += "<div style='color:#c00;'>Ошибка VKID SDK!</div>";
+    // Ожидаем VKIDSDK загрузку
+    function showMsg(msg, ok) {
+      document.getElementById('result').innerHTML = `<div class="${ok ? 'success' : 'error'}">${msg}</div>`;
     }
-  </script>
-</body>
-</html>
+
+    if ('VKIDSDK' in window) {
+      window.VKIDSDK.Callback.process()
+        .then(async ({ code, device_id, state, code_verifier }) => {
+          // Отправляем данные на backend (state — твой tg_id)
+         try {
+  const res = await fetch('/auth/vk/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      code,
+      device_id,
+      code_verifier,
+      tg_id: state // здесь твой Telegram ID из state
+    })
+  });
+  const data = await res.json();
+  if (data.success) {
+    showMsg('Авторизация завершена! Можете вернуться в Telegram 🤗', true);
+  } else {
+    showMsg('Ошибка при авторизации: ' + (data.error || 'Неизвестная ошибка'), false);
+  }
+} catch (err) {
+  showMsg('Ошибка соединения с сервером: ' + err.message, false);
+}

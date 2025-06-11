@@ -16,40 +16,48 @@
     <h2>Завершаем авторизацию VK ID...</h2>
     <div id="result"></div>
   </div>
-  <script>
-    function showMsg(msg, ok) {
-      document.getElementById('result').innerHTML = `<div class="${ok ? 'success' : 'error'}">${msg}</div>`;
-    }
+ <script>
+function showMsg(msg, ok) {
+  document.getElementById('result').innerHTML = `<div class="${ok ? 'success' : 'error'}">${msg}</div>`;
+}
 
-    function processVKID() {
-      if ('VKIDSDK' in window && window.VKIDSDK.Callback && window.VKIDSDK.Callback.process) {
-        window.VKIDSDK.Callback.process()
-          .then(async ({ code, device_id, state, code_verifier }) => {
-            try {
-              const res = await fetch('/auth/vk/token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ code, device_id, code_verifier, tg_id: state })
-              });
-              const data = await res.json();
-              if (data.success) {
-                showMsg('Авторизация завершена! Можете вернуться в Telegram 🤗', true);
-              } else {
-                showMsg('Ошибка при авторизации: ' + (data.error || 'Неизвестная ошибка'), false);
-              }
-            } catch (err) {
-              showMsg('Ошибка соединения с сервером: ' + err.message, false);
-            }
+if ('VKIDSDK' in window) {
+  window.VKIDSDK.Callback.process()
+    .then(async ({ code, device_id, state, code_verifier }) => {
+      // Пишем всё в консоль!
+      console.log('VKID CALLBACK:', { code, device_id, state, code_verifier });
+
+      // Показываем на экране что получили
+      showMsg('DEBUG: ' + JSON.stringify({ code, device_id, state, code_verifier }), true);
+
+      try {
+        const res = await fetch('/auth/vk/token', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            code,
+            device_id,
+            code_verifier,
+            tg_id: state
           })
-          .catch((err) => {
-            showMsg('Ошибка VKID Callback: ' + err.message, false);
-          });
-      } else {
-        setTimeout(processVKID, 100);
+        });
+        const data = await res.json();
+        if (data.success) {
+          showMsg('Авторизация завершена! Можете вернуться в Telegram 🤗', true);
+        } else {
+          showMsg('Ошибка при авторизации: ' + (data.error || 'Неизвестная ошибка'), false);
+        }
+      } catch (err) {
+        showMsg('Ошибка соединения с сервером: ' + err.message, false);
       }
-    }
-
-    processVKID();
-  </script>
+    })
+    .catch(err => {
+      showMsg('VKID CALLBACK ERROR: ' + err.message, false);
+      console.error(err);
+    });
+} else {
+  document.body.innerHTML += "<div style='color:#c00;'>Ошибка VKID SDK!</div>";
+}
+</script>
 </body>
 </html>

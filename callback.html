@@ -21,36 +21,35 @@
       document.getElementById('result').innerHTML = `<div class="${ok ? 'success' : 'error'}">${msg}</div>`;
     }
 
-    if ('VKIDSDK' in window) {
-      window.VKIDSDK.Callback.process()
-        .then(async ({ code, device_id, state, code_verifier }) => {
-          try {
-            const res = await fetch('/auth/vk/token', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                code,
-                device_id,
-                code_verifier,
-                tg_id: state // здесь твой Telegram ID из state
-              })
-            });
-            const data = await res.json();
-            if (data.success) {
-              showMsg('Авторизация завершена! Можете вернуться в Telegram 🤗', true);
-            } else {
-              showMsg('Ошибка при авторизации: ' + (data.error || 'Неизвестная ошибка'), false);
+    function processVKID() {
+      if ('VKIDSDK' in window && window.VKIDSDK.Callback && window.VKIDSDK.Callback.process) {
+        window.VKIDSDK.Callback.process()
+          .then(async ({ code, device_id, state, code_verifier }) => {
+            try {
+              const res = await fetch('/auth/vk/token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ code, device_id, code_verifier, tg_id: state })
+              });
+              const data = await res.json();
+              if (data.success) {
+                showMsg('Авторизация завершена! Можете вернуться в Telegram 🤗', true);
+              } else {
+                showMsg('Ошибка при авторизации: ' + (data.error || 'Неизвестная ошибка'), false);
+              }
+            } catch (err) {
+              showMsg('Ошибка соединения с сервером: ' + err.message, false);
             }
-          } catch (err) {
-            showMsg('Ошибка соединения с сервером: ' + err.message, false);
-          }
-        })
-        .catch(err => {
-          showMsg('Ошибка VKID SDK: ' + err.message, false);
-        });
-    } else {
-      showMsg('Ошибка загрузки VKID SDK!', false);
+          })
+          .catch((err) => {
+            showMsg('Ошибка VKID Callback: ' + err.message, false);
+          });
+      } else {
+        setTimeout(processVKID, 100);
+      }
     }
+
+    processVKID();
   </script>
 </body>
 </html>

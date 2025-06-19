@@ -2,115 +2,274 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Фокусник Альтаир — Авторизация через VK ID</title>
-  <!-- VK ID SDK -->
+  <title>Магический бот-помощник “Фокусник Альтаир” 🧙🏼‍♂️</title>
+  <!-- VK ID SDK (нужен только если есть tg_id) -->
   <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
   <style>
-    body { font-family: system-ui, sans-serif; padding: 40px; }
-    .wrap { max-width: 400px; margin: 0 auto; }
-    h1 { font-size: 2em; margin-bottom: 0.5em; }
-    #VkIdSdkOneTap { margin-top: 20px; }
-    .error { color: #c00; margin-top: 30px; }
-    .success { color: #0a0; margin-top: 30px; }
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', 'Verdana', system-ui, sans-serif;
+      background: linear-gradient(135deg, #5e35b1 0%, #26c6da 100%);
+      min-height: 100vh;
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      align-items: stretch;
+    }
+    .container {
+      max-width: 440px;
+      margin: 40px auto 0 auto;
+      background: rgba(30, 22, 61, 0.83);
+      border-radius: 1.5em;
+      box-shadow: 0 6px 36px #0008;
+      padding: 32px 22px 24px 22px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 {
+      font-family: 'Montserrat', 'Segoe UI', 'Verdana', system-ui, sans-serif;
+      font-size: 2.1em;
+      font-weight: bold;
+      color: #e6c97c;
+      text-align: center;
+      margin-bottom: 8px;
+      text-shadow: 0 1px 8px #0005, 0 0 1px #fff;
+      letter-spacing: 0.5px;
+    }
+    h2 {
+      color: #ffecb3;
+      margin: 18px 0 8px 0;
+      font-size: 1.13em;
+      font-weight: 600;
+    }
+    .motivation {
+      font-size: 1.12em;
+      color: #80d8ff;
+      font-style: italic;
+      margin-bottom: 10px;
+      text-align: center;
+    }
+    .desc {
+      margin-bottom: 14px;
+      text-align: center;
+      font-size: 1.13em;
+      color: #fffde7;
+    }
+    .magic {
+      margin: 16px 0 12px 0;
+      font-size: 1.15em;
+      font-weight: 500;
+      color: #e6c97c;
+      text-shadow: 0 0 4px #251652;
+      letter-spacing: 0.5px;
+    }
+    .features {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 12px;
+      margin-top: 5px;
+      width: 100%;
+    }
+    .feature {
+      background: #322265;
+      border-radius: 1em;
+      padding: 8px 10px;
+      flex: 1 1 0;
+      font-size: 0.98em;
+      text-align: center;
+      color: #ffe082;
+      box-shadow: 0 0 8px #0002;
+      border: 1px solid #432b7d;
+    }
+    .button {
+      display: block;
+      margin: 22px auto 0 auto;
+      padding: 14px 0;
+      background: linear-gradient(90deg, #7c4dff 0%, #1de9b6 100%);
+      color: #fff;
+      border: none;
+      border-radius: 1em;
+      font-size: 1.2em;
+      font-family: inherit;
+      font-weight: bold;
+      box-shadow: 0 4px 24px #311b9288;
+      cursor: pointer;
+      transition: background 0.16s;
+      width: 100%;
+      letter-spacing: 0.3px;
+      text-shadow: 0 1px 6px #0005;
+    }
+    .button:hover {
+      background: linear-gradient(90deg, #8e24aa 0%, #00bfae 100%);
+    }
+    .vk-container {
+      margin-top: 16px;
+      width: 100%;
+    }
+    .error, .success {
+      color: #ff5252;
+      margin-top: 18px;
+      text-align: center;
+      font-size: 1em;
+    }
+    .success {
+      color: #76ff03;
+    }
+    .privacy, .contact {
+      margin-top: 20px;
+      font-size: 0.99em;
+      color: #b0bec5;
+      text-align: center;
+    }
+    .privacy a {
+      color: #ffd600;
+      text-decoration: underline;
+      transition: color .17s;
+    }
+    .privacy a:hover {
+      color: #ffd54f;
+    }
+    @media (max-width: 600px) {
+      .container { margin-top: 18px; padding: 16px 4vw 16px 4vw; }
+      h1 { font-size: 1.32em;}
+      .feature { font-size: 0.94em;}
+      .button { font-size: 1em; }
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <h1>Фокусник Альтаир</h1>
-    <p>Для доступа к сервису авторизуйтесь через VK ID:</p>
-    <div id="VkIdSdkOneTap"></div>
-    <div id="error" class="error"></div>
-    <div id="success" class="success"></div>
+  <div class="container" id="mainContainer">
+    <!-- контент вставляется через JS -->
   </div>
+  <!-- VKID SDK работает только если есть tg_id -->
   <script>
-    // ====== VK ID + PKCE (OneTap) ======
+    // ===== ФРОНТ: магический лендинг + VK ID Auth =====
 
-    // Генерация PKCE code_verifier (64 символа, рекомендовано VK)
-    function generateCodeVerifier() {
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
-      let arr = Array.from(crypto.getRandomValues(new Uint8Array(64)));
-      return arr.map(x => chars[x % chars.length]).join('');
-    }
-
-    // Генерация PKCE code_challenge (SHA-256 + base64url)
-    async function generateCodeChallenge(verifier) {
-      const encoder = new TextEncoder();
-      const data = encoder.encode(verifier);
-      const hash = await window.crypto.subtle.digest('SHA-256', data);
-      let base64 = btoa(String.fromCharCode(...new Uint8Array(hash)))
-        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-      return base64;
-    }
-
-    // Получение Telegram ID из query (?tg_id=...)
+    // Вспомогалки
     function getQueryParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
     }
-
     const tg_id = getQueryParam('tg_id');
+    const main = document.getElementById('mainContainer');
+
     if (!tg_id) {
-      document.getElementById('error').textContent = 'Ошибка: Telegram ID не передан! Пожалуйста, перейдите по правильной ссылке из Telegram-бота.';
-      throw new Error('tg_id обязателен');
-    }
+      // --- МАГИЧЕСКИЙ ЛЕНДИНГ ---
+      main.innerHTML = `
+        <h1>Магический бот-помощник “Фокусник Альтаир” 🧙🏼‍♂️</h1>
+        <div class="motivation">Помогает сосредоточиться на важном и не залипнуть в ленте</div>
+        <div class="desc">
+          Этот бот умеет в одно касание показывать новости из ваших любимых VK-групп прямо в Telegram.<br>
+          Без лишних хлопот — только самые важные обновления, с магическим удобством и заботой о вашей приватности ✨
+        </div>
+        <div class="magic">Пусть цифровая лента работает на тебя, а не наоборот!<br>
+        Просто запусти волшебство — и наслаждайся результатом 🪄</div>
+        <div class="features">
+          <div class="feature">✨ Всегда свежая лента VK</div>
+          <div class="feature">🔒 Безопасная интеграция с Telegram</div>
+          <div class="feature">🧙 Просто, быстро, магически!</div>
+        </div>
+        <a class="button" href="https://t.me/fokusnik_altair_bot" target="_blank" rel="noopener">
+          Перейти в Telegram и начать магию 🔮
+        </a>
+        <div class="privacy">
+          Бот использует безопасную авторизацию VK ID.<br>
+          Все данные под охраной магической приватности 🛡️<br>
+          <a href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a>
+        </div>
+        <div class="contact">
+          Связаться с магистром бота: <a href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
+        </div>
+      `;
+    } else {
+      // --- АВТОРИЗАЦИЯ ЧЕРЕЗ VK ID (OneTap) ---
+      main.innerHTML = `
+        <h1>Фокусник Альтаир — авторизация через VK ID</h1>
+        <div class="desc">
+          Для доступа к сервису авторизуйтесь через VK ID:<br>
+          <span style="color:#b2dfdb">Ваш Telegram ID — <b>${tg_id}</b></span>
+        </div>
+        <div class="vk-container">
+          <div id="VkIdSdkOneTap"></div>
+          <div id="error" class="error"></div>
+          <div id="success" class="success"></div>
+        </div>
+        <div class="privacy">
+          Ваши данные защищены. <a href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a>
+        </div>
+      `;
 
-    (async () => {
-      // 1. Генерируем PKCE параметры
-      const code_verifier = generateCodeVerifier();
-      const code_challenge = await generateCodeChallenge(code_verifier);
-
-      // 2. Проверяем, что SDK загрузился
-      if (!('VKIDSDK' in window)) {
-        document.getElementById('error').textContent = 'Ошибка загрузки VKID SDK!';
-        return;
+      // Всё для PKCE
+      function generateCodeVerifier() {
+        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
+        let arr = Array.from(crypto.getRandomValues(new Uint8Array(64)));
+        return arr.map(x => chars[x % chars.length]).join('');
       }
-      const VKID = window.VKIDSDK;
+      async function generateCodeChallenge(verifier) {
+        const encoder = new TextEncoder();
+        const data = encoder.encode(verifier);
+        const hash = await window.crypto.subtle.digest('SHA-256', data);
+        let base64 = btoa(String.fromCharCode(...new Uint8Array(hash)))
+          .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+        return base64;
+      }
 
-      // 3. Инициализируем VKID SDK OneTap с PKCE
-      VKID.Config.init({
-        app: 53336238, // Твой client_id
-        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // Совпадает с настройками VK!
-        state: tg_id, // Телеграм ID как state
-        scope: 'groups',
-        pkce: {
-          codeChallenge: code_challenge,
-          codeChallengeMethod: 'S256'
+      (async () => {
+        const code_verifier = generateCodeVerifier();
+        const code_challenge = await generateCodeChallenge(code_verifier);
+
+        if (!('VKIDSDK' in window)) {
+          document.getElementById('error').textContent = 'Ошибка загрузки VKID SDK!';
+          return;
         }
-      });
+        const VKID = window.VKIDSDK;
 
-      const oneTap = new VKID.OneTap();
-
-      // 4. Обработка успешной авторизации
-      oneTap
-        .on(window.VKIDSDK.OneTapInternalEvents.LOGIN_SUCCESS, async ({ code, device_id, state }) => {
-          try {
-            // Отправляем параметры на backend для обмена на токен
-            const res = await fetch('/auth/vk/token', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                code,
-                code_verifier, // тот же, что был сгенерирован выше
-                device_id,
-                tg_id: state // Telegram ID (state)
-              })
-            });
-            const result = await res.json();
-            if (result.success) {
-              document.getElementById('success').textContent = 'Успешная авторизация! Можете вернуться в Telegram.';
-            } else {
-              document.getElementById('error').textContent = result.error || 'Не удалось авторизоваться.';
-            }
-          } catch (err) {
-            document.getElementById('error').textContent = 'Ошибка обмена кода на токен: ' + err.message;
+        VKID.Config.init({
+          app: 53336238,
+          redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
+          state: tg_id,
+          scope: 'groups',
+          pkce: {
+            codeChallenge: code_challenge,
+            codeChallengeMethod: 'S256'
           }
-        })
-        .on(window.VKIDSDK.WidgetEvents.ERROR, (err) => {
-          document.getElementById('error').textContent = 'Ошибка VK ID: ' + (err.message || err);
         });
 
-      oneTap.render({ container: document.getElementById('VkIdSdkOneTap') });
-    })();
+        const oneTap = new VKID.OneTap();
+        oneTap
+          .on(window.VKIDSDK.OneTapInternalEvents.LOGIN_SUCCESS, async ({ code, device_id, state }) => {
+            try {
+              const res = await fetch('/auth/vk/token', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  code,
+                  code_verifier,
+                  device_id,
+                  tg_id: state
+                })
+              });
+              const result = await res.json();
+              if (result.success) {
+                document.getElementById('success').textContent = 'Успешная авторизация! Можете вернуться в Telegram.';
+              } else {
+                document.getElementById('error').textContent = result.error || 'Не удалось авторизоваться.';
+              }
+            } catch (err) {
+              document.getElementById('error').textContent = 'Ошибка обмена кода на токен: ' + err.message;
+            }
+          })
+          .on(window.VKIDSDK.WidgetEvents.ERROR, (err) => {
+            document.getElementById('error').textContent = 'Ошибка VK ID: ' + (err.message || err);
+          });
+
+        oneTap.render({ container: document.getElementById('VkIdSdkOneTap') });
+      })();
+    }
   </script>
 </body>
 </html>

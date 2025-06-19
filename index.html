@@ -2,274 +2,259 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Магический бот-помощник “Фокусник Альтаир” 🧙🏼‍♂️</title>
-  <!-- VK ID SDK (нужен только если есть tg_id) -->
-  <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+  <title>Магический бот — Фокусник Альтаир</title>
+  <!-- Google Fonts: Marcellus SC и Roboto Slab -->
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus+SC:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
+    :root {
+      --violet: #7847c7;
+      --turquoise: #1de9b6;
+      --gold: #ffe082;
+      --dark: #1e1733;
+      --white: #fff;
+      --light-gold: #fff7d6;
+      --shadow: 0 8px 32px 0 rgba(40,20,70,0.14);
+    }
     body {
-      margin: 0;
-      padding: 0;
-      font-family: 'Segoe UI', 'Verdana', system-ui, sans-serif;
-      background: linear-gradient(135deg, #5e35b1 0%, #26c6da 100%);
       min-height: 100vh;
-      color: #fff;
+      margin: 0;
+      font-family: 'Roboto Slab', 'Marcellus SC', serif;
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 80%, #1de9b6 100%);
       display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      align-items: stretch;
+      align-items: center;
+      justify-content: center;
+    }
+    .magic-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
     }
     .container {
-      max-width: 440px;
-      margin: 40px auto 0 auto;
-      background: rgba(30, 22, 61, 0.83);
-      border-radius: 1.5em;
-      box-shadow: 0 6px 36px #0008;
-      padding: 32px 22px 24px 22px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1 {
-      font-family: 'Montserrat', 'Segoe UI', 'Verdana', system-ui, sans-serif;
-      font-size: 2.1em;
-      font-weight: bold;
-      color: #e6c97c;
+      position: relative;
+      z-index: 1;
+      max-width: 420px;
+      width: 90vw;
+      margin: 48px auto;
+      background: var(--white);
+      border-radius: 28px;
+      box-shadow: var(--shadow);
+      padding: 36px 32px 28px 32px;
       text-align: center;
-      margin-bottom: 8px;
-      text-shadow: 0 1px 8px #0005, 0 0 1px #fff;
-      letter-spacing: 0.5px;
+      overflow: hidden;
+      animation: fadeInUp 1s cubic-bezier(.8,-0.1,.2,1.2);
     }
-    h2 {
-      color: #ffecb3;
-      margin: 18px 0 8px 0;
-      font-size: 1.13em;
-      font-weight: 600;
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(60px);}
+      to { opacity:1; transform: translateY(0);}
     }
-    .motivation {
-      font-size: 1.12em;
-      color: #80d8ff;
+    .main-title {
+      font-family: 'Marcellus SC', serif;
+      font-size: 2.2em;
+      font-weight: 700;
+      color: var(--violet);
+      margin-bottom: 0.3em;
+      line-height: 1.16;
+      text-shadow: 0 2px 16px #d0b3ff70;
+      letter-spacing: 0.02em;
+    }
+    .subtitle {
+      font-family: 'Marcellus SC', serif;
+      font-size: 1.08em;
       font-style: italic;
-      margin-bottom: 10px;
-      text-align: center;
+      color: var(--turquoise);
+      margin-bottom: 20px;
+      margin-top: 0;
+      font-weight: 500;
+      letter-spacing: 0.01em;
     }
     .desc {
-      margin-bottom: 14px;
-      text-align: center;
-      font-size: 1.13em;
-      color: #fffde7;
+      color: #191523;
+      font-size: 1.03em;
+      font-family: 'Roboto Slab', serif;
+      margin-bottom: 20px;
+      line-height: 1.5;
+      font-weight: 400;
+      letter-spacing: 0.01em;
     }
-    .magic {
-      margin: 16px 0 12px 0;
-      font-size: 1.15em;
-      font-weight: 500;
-      color: #e6c97c;
-      text-shadow: 0 0 4px #251652;
-      letter-spacing: 0.5px;
+    .magic-line {
+      color: #b69226;
+      font-size: 1em;
+      margin: 14px 0 18px 0;
+      font-family: 'Marcellus SC', serif;
+      letter-spacing: 0.01em;
+      opacity: 0.97;
+      animation: magicFade 2.5s infinite alternate;
+    }
+    .magic-note {
+      color: #b69226;
+      background: #fffbe8;
+      padding: 7px 0 5px 0;
+      border-radius: 12px;
+      margin: 7px 0 0 0;
+      font-size: 0.97em;
+      font-weight: 600;
+      text-align: center;
+      display: block;
+      letter-spacing: 0.01em;
+      box-shadow: 0 0 10px #ffe08255;
+      transition: background 0.3s;
+      font-family: 'Roboto Slab', serif;
+    }
+    @keyframes magicFade {
+      from { text-shadow: 0 0 2px #f9de91, 0 0 6px #fff176; }
+      to   { text-shadow: 0 0 10px #fff9c4, 0 0 24px #ffd740;}
     }
     .features {
       display: flex;
-      justify-content: space-between;
-      gap: 8px;
-      margin-bottom: 12px;
-      margin-top: 5px;
-      width: 100%;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0 16px 0;
+      flex-wrap: wrap;
     }
-    .feature {
-      background: #322265;
-      border-radius: 1em;
-      padding: 8px 10px;
-      flex: 1 1 0;
-      font-size: 0.98em;
-      text-align: center;
-      color: #ffe082;
-      box-shadow: 0 0 8px #0002;
-      border: 1px solid #432b7d;
-    }
-    .button {
-      display: block;
-      margin: 22px auto 0 auto;
-      padding: 14px 0;
-      background: linear-gradient(90deg, #7c4dff 0%, #1de9b6 100%);
-      color: #fff;
-      border: none;
-      border-radius: 1em;
-      font-size: 1.2em;
-      font-family: inherit;
-      font-weight: bold;
-      box-shadow: 0 4px 24px #311b9288;
-      cursor: pointer;
-      transition: background 0.16s;
-      width: 100%;
-      letter-spacing: 0.3px;
-      text-shadow: 0 1px 6px #0005;
-    }
-    .button:hover {
-      background: linear-gradient(90deg, #8e24aa 0%, #00bfae 100%);
-    }
-    .vk-container {
-      margin-top: 16px;
-      width: 100%;
-    }
-    .error, .success {
-      color: #ff5252;
-      margin-top: 18px;
-      text-align: center;
+    .feat-card {
+      background: var(--violet);
+      color: var(--white);
+      border-radius: 16px;
+      padding: 13px 16px;
       font-size: 1em;
+      font-weight: 500;
+      margin: 3px 0;
+      box-shadow: 0 2px 10px #c2a6e99a;
+      min-width: 110px;
+      transition: background 0.2s, transform 0.12s;
+      cursor: default;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      font-family: 'Roboto Slab', serif;
+      animation: fadeInUp 1.4s cubic-bezier(.8,-0.1,.2,1.2);
     }
-    .success {
-      color: #76ff03;
+    .magic-btn {
+      display: inline-block;
+      background: linear-gradient(90deg, #25e6bc 10%, #6e74e9 100%);
+      color: #fff;
+      font-size: 1.18em;
+      font-weight: 700;
+      font-family: 'Marcellus SC', serif;
+      padding: 14px 20px 12px 20px;
+      border: none;
+      border-radius: 18px;
+      box-shadow: 0 2px 14px #79e2c861, 0 0px 0 #fff;
+      cursor: pointer;
+      margin: 24px 0 8px 0;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: transform 0.13s, box-shadow 0.16s;
+      position: relative;
+      overflow: hidden;
+      animation: pulseBtn 2.2s infinite alternate;
     }
-    .privacy, .contact {
-      margin-top: 20px;
-      font-size: 0.99em;
-      color: #b0bec5;
-      text-align: center;
+    .magic-btn:active, .magic-btn:focus {
+      transform: scale(0.97);
+      box-shadow: 0 0px 6px #79e2c888;
+      outline: none;
     }
-    .privacy a {
-      color: #ffd600;
+    @keyframes pulseBtn {
+      from { box-shadow: 0 2px 18px #c8fbe9cc; }
+      to   { box-shadow: 0 4px 30px #e1e4ff77;}
+    }
+    .policy-link {
+      color: #97730f;
       text-decoration: underline;
-      transition: color .17s;
+      font-size: 0.98em;
+      font-weight: 500;
     }
-    .privacy a:hover {
-      color: #ffd54f;
+    .policy-link:hover {
+      color: #b69226;
+      text-decoration: underline;
+    }
+    .footer {
+      color: #66646e;
+      font-size: 0.93em;
+      margin-top: 12px;
+      text-align: center;
+      font-family: 'Roboto Slab', serif;
+      word-break: break-all;
+    }
+    .contact-link {
+      color: #228ca3;
+      text-decoration: underline;
+    }
+    .contact-link:hover {
+      color: #1e1733;
+    }
+    /* Анимация магических звёздочек */
+    .star {
+      position: absolute;
+      font-size: 1.6em;
+      opacity: 0.14;
+      animation: stars 3.2s linear infinite;
+      pointer-events: none;
+    }
+    .star-1 { left: 22%; top: 18%; animation-delay: 0s;}
+    .star-2 { right: 19%; top: 13%; font-size:2.1em; animation-delay: .7s;}
+    .star-3 { left: 16%; bottom: 14%; font-size:1.3em; animation-delay: 1.1s;}
+    .star-4 { right: 15%; bottom: 21%; font-size:1.8em; animation-delay: 1.6s;}
+    .star-5 { left: 48%; top: 24%; font-size:1.1em; animation-delay: 2.4s;}
+    @keyframes stars {
+      0%   { opacity: 0.13; transform: scale(0.9) rotate(0deg);}
+      47%  { opacity: 0.23;}
+      60%  { opacity: 0.35; transform: scale(1.3) rotate(19deg);}
+      100% { opacity: 0.11; transform: scale(0.7) rotate(-30deg);}
     }
     @media (max-width: 600px) {
-      .container { margin-top: 18px; padding: 16px 4vw 16px 4vw; }
-      h1 { font-size: 1.32em;}
-      .feature { font-size: 0.94em;}
-      .button { font-size: 1em; }
+      .container { padding: 19px 4vw 20px 4vw; }
+      .main-title { font-size: 1.28em;}
+      .features { flex-direction: column; gap: 0;}
+      .feat-card { min-width: 90px; font-size:0.97em;}
+      .magic-btn { font-size: 1em; padding: 13px 0; width: 97%; }
     }
   </style>
 </head>
 <body>
-  <div class="container" id="mainContainer">
-    <!-- контент вставляется через JS -->
+  <!-- Магические анимированные звёздочки -->
+  <div class="magic-bg">
+    <span class="star star-1">✨</span>
+    <span class="star star-2">🟣</span>
+    <span class="star star-3">🔮</span>
+    <span class="star star-4">⭐</span>
+    <span class="star star-5">🪄</span>
   </div>
-  <!-- VKID SDK работает только если есть tg_id -->
-  <script>
-    // ===== ФРОНТ: магический лендинг + VK ID Auth =====
-
-    // Вспомогалки
-    function getQueryParam(name) {
-      const params = new URLSearchParams(window.location.search);
-      return params.get(name);
-    }
-    const tg_id = getQueryParam('tg_id');
-    const main = document.getElementById('mainContainer');
-
-    if (!tg_id) {
-      // --- МАГИЧЕСКИЙ ЛЕНДИНГ ---
-      main.innerHTML = `
-        <h1>Магический бот-помощник “Фокусник Альтаир” 🧙🏼‍♂️</h1>
-        <div class="motivation">Помогает сосредоточиться на важном и не залипнуть в ленте</div>
-        <div class="desc">
-          Этот бот умеет в одно касание показывать новости из ваших любимых VK-групп прямо в Telegram.<br>
-          Без лишних хлопот — только самые важные обновления, с магическим удобством и заботой о вашей приватности ✨
-        </div>
-        <div class="magic">Пусть цифровая лента работает на тебя, а не наоборот!<br>
-        Просто запусти волшебство — и наслаждайся результатом 🪄</div>
-        <div class="features">
-          <div class="feature">✨ Всегда свежая лента VK</div>
-          <div class="feature">🔒 Безопасная интеграция с Telegram</div>
-          <div class="feature">🧙 Просто, быстро, магически!</div>
-        </div>
-        <a class="button" href="https://t.me/fokusnik_altair_bot" target="_blank" rel="noopener">
-          Перейти в Telegram и начать магию 🔮
-        </a>
-        <div class="privacy">
-          Бот использует безопасную авторизацию VK ID.<br>
-          Все данные под охраной магической приватности 🛡️<br>
-          <a href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a>
-        </div>
-        <div class="contact">
-          Связаться с магистром бота: <a href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
-        </div>
-      `;
-    } else {
-      // --- АВТОРИЗАЦИЯ ЧЕРЕЗ VK ID (OneTap) ---
-      main.innerHTML = `
-        <h1>Фокусник Альтаир — авторизация через VK ID</h1>
-        <div class="desc">
-          Для доступа к сервису авторизуйтесь через VK ID:<br>
-          <span style="color:#b2dfdb">Ваш Telegram ID — <b>${tg_id}</b></span>
-        </div>
-        <div class="vk-container">
-          <div id="VkIdSdkOneTap"></div>
-          <div id="error" class="error"></div>
-          <div id="success" class="success"></div>
-        </div>
-        <div class="privacy">
-          Ваши данные защищены. <a href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a>
-        </div>
-      `;
-
-      // Всё для PKCE
-      function generateCodeVerifier() {
-        const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
-        let arr = Array.from(crypto.getRandomValues(new Uint8Array(64)));
-        return arr.map(x => chars[x % chars.length]).join('');
-      }
-      async function generateCodeChallenge(verifier) {
-        const encoder = new TextEncoder();
-        const data = encoder.encode(verifier);
-        const hash = await window.crypto.subtle.digest('SHA-256', data);
-        let base64 = btoa(String.fromCharCode(...new Uint8Array(hash)))
-          .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
-        return base64;
-      }
-
-      (async () => {
-        const code_verifier = generateCodeVerifier();
-        const code_challenge = await generateCodeChallenge(code_verifier);
-
-        if (!('VKIDSDK' in window)) {
-          document.getElementById('error').textContent = 'Ошибка загрузки VKID SDK!';
-          return;
-        }
-        const VKID = window.VKIDSDK;
-
-        VKID.Config.init({
-          app: 53336238,
-          redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
-          state: tg_id,
-          scope: 'groups',
-          pkce: {
-            codeChallenge: code_challenge,
-            codeChallengeMethod: 'S256'
-          }
-        });
-
-        const oneTap = new VKID.OneTap();
-        oneTap
-          .on(window.VKIDSDK.OneTapInternalEvents.LOGIN_SUCCESS, async ({ code, device_id, state }) => {
-            try {
-              const res = await fetch('/auth/vk/token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  code,
-                  code_verifier,
-                  device_id,
-                  tg_id: state
-                })
-              });
-              const result = await res.json();
-              if (result.success) {
-                document.getElementById('success').textContent = 'Успешная авторизация! Можете вернуться в Telegram.';
-              } else {
-                document.getElementById('error').textContent = result.error || 'Не удалось авторизоваться.';
-              }
-            } catch (err) {
-              document.getElementById('error').textContent = 'Ошибка обмена кода на токен: ' + err.message;
-            }
-          })
-          .on(window.VKIDSDK.WidgetEvents.ERROR, (err) => {
-            document.getElementById('error').textContent = 'Ошибка VK ID: ' + (err.message || err);
-          });
-
-        oneTap.render({ container: document.getElementById('VkIdSdkOneTap') });
-      })();
-    }
-  </script>
+  <div class="container">
+    <div class="main-title">
+      Магический бот-помощник<br>Фокусник Альтаир 🧙🏼‍♂️
+    </div>
+    <div class="subtitle">
+      <span style="font-style:italic;">Помогает сосредоточиться на важном и не залипнуть в ленте</span>
+    </div>
+    <div class="desc">
+      Этот бот умеет в одно касание показывать новости из ваших любимых VK-групп прямо в Telegram.<br>
+      Без лишних хлопот — только самые важные обновления, с магическим удобством и заботой о вашей приватности ✨
+    </div>
+    <div class="magic-line">
+      Пусть цифровая лента работает на тебя, а не наоборот<br>
+      Просто запусти волшебство и наслаждайся результатом 💫
+    </div>
+    <div class="features">
+      <div class="feat-card">Всегда свежая лента VK 🟣</div>
+      <div class="feat-card">Безопасная интеграция с Telegram 🔒</div>
+      <div class="feat-card">Просто быстро магически ⭐</div>
+    </div>
+    <a class="magic-btn" href="https://t.me/mytestvk_bot" target="_blank" rel="noopener">
+      Перейти в Telegram и начать магию 🔮
+    </a>
+    <div class="magic-note">
+      Бот использует безопасную авторизацию VK ID<br>
+      Все данные под охраной магической приватности<br>
+      <a href="https://api.fokusnikaltair.xyz/privacy.html" class="policy-link" target="_blank">Политика конфиденциальности</a>
+    </div>
+    <div class="footer">
+      Связаться с магистром бота: <a class="contact-link" href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
+    </div>
+  </div>
 </body>
 </html>

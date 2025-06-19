@@ -23,17 +23,16 @@
     <div id="success" class="success"></div>
   </div>
   <script>
-    // ===== Фронтенд для VKID (OneTap + PKCE) =====
+    // ====== VK ID + PKCE (OneTap) ======
 
-    // 1. Функция для генерации code_verifier (PKCE)
+    // Генерация PKCE code_verifier (64 символа, рекомендовано VK)
     function generateCodeVerifier() {
-      // 64 символа: a-z, A-Z, 0-9, _ -
       const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_-';
       let arr = Array.from(crypto.getRandomValues(new Uint8Array(64)));
       return arr.map(x => chars[x % chars.length]).join('');
     }
 
-    // 2. SHA-256 + base64url (PKCE)
+    // Генерация PKCE code_challenge (SHA-256 + base64url)
     async function generateCodeChallenge(verifier) {
       const encoder = new TextEncoder();
       const data = encoder.encode(verifier);
@@ -43,74 +42,74 @@
       return base64;
     }
 
-    // 3. Получаем Telegram ID из query (?tg_id=...)
+    // Получение Telegram ID из query (?tg_id=...)
     function getQueryParam(name) {
       const params = new URLSearchParams(window.location.search);
       return params.get(name);
     }
+
     const tg_id = getQueryParam('tg_id');
     if (!tg_id) {
       document.getElementById('error').textContent = 'Ошибка: Telegram ID не передан! Пожалуйста, перейдите по правильной ссылке из Telegram-бота.';
       throw new Error('tg_id обязателен');
     }
 
-    // 4. Запуск OneTap с поддержкой PKCE
     (async () => {
-      // Генерируем PKCE code_verifier/code_challenge
+      // 1. Генерируем PKCE параметры
       const code_verifier = generateCodeVerifier();
       const code_challenge = await generateCodeChallenge(code_verifier);
 
-      if ('VKIDSDK' in window) {
-        const VKID = window.VKIDSDK;
+      // 2. Проверяем, что SDK загрузился
+      if (!('VKIDSDK' in window)) {
+        document.getElementById('error').textContent = 'Ошибка загрузки VKID SDK!';
+        return;
+      }
+      const VKID = window.VKIDSDK;
 
-        VKID.Config.init({
-          app: 53336238, // Твой client_id
-          redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
-          state: tg_id, // Telegram ID как state
-          scope: 'groups',
-          pkce: {
-            codeChallenge: code_challenge,
-            codeChallengeMethod: 'S256'
+      // 3. Инициализируем VKID SDK OneTap с PKCE
+      VKID.Config.init({
+        app: 53336238, // Твой client_id
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // Совпадает с настройками VK!
+        state: tg_id, // Телеграм ID как state
+        scope: 'groups',
+        pkce: {
+          codeChallenge: code_challenge,
+          codeChallengeMethod: 'S256'
+        }
+      });
+
+      const oneTap = new VKID.OneTap();
+
+      // 4. Обработка успешной авторизации
+      oneTap
+        .on(window.VKIDSDK.OneTapInternalEvents.LOGIN_SUCCESS, async ({ code, device_id, state }) => {
+          try {
+            // Отправляем параметры на backend для обмена на токен
+            const res = await fetch('/auth/vk/token', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify({
+                code,
+                code_verifier, // тот же, что был сгенерирован выше
+                device_id,
+                tg_id: state // Telegram ID (state)
+              })
+            });
+            const result = await res.json();
+            if (result.success) {
+              document.getElementById('success').textContent = 'Успешная авторизация! Можете вернуться в Telegram.';
+            } else {
+              document.getElementById('error').textContent = result.error || 'Не удалось авторизоваться.';
+            }
+          } catch (err) {
+            document.getElementById('error').textContent = 'Ошибка обмена кода на токен: ' + err.message;
           }
+        })
+        .on(window.VKIDSDK.WidgetEvents.ERROR, (err) => {
+          document.getElementById('error').textContent = 'Ошибка VK ID: ' + (err.message || err);
         });
 
-        const oneTap = new VKID.OneTap();
-
-        oneTap
-          .on('auth', async (payload) => {
-            // payload содержит { code, device_id, state }
-            const { code, device_id, state } = payload;
-            // Отправляем все параметры на backend для обмена токена
-            try {
-              const res = await fetch('/auth/vk/token', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  code,
-                  code_verifier,  // именно тот, что мы сгенерировали!
-                  device_id,
-                  tg_id
-                })
-              });
-              const result = await res.json();
-              if (result.success) {
-                document.getElementById('success').textContent = 'Успешная авторизация! Можете вернуться в Telegram.';
-              } else {
-                document.getElementById('error').textContent = result.error || 'Не удалось авторизоваться.';
-              }
-            } catch (err) {
-              document.getElementById('error').textContent = 'Ошибка обмена кода на токен: ' + err.message;
-            }
-          })
-          .on('error', (err) => {
-            document.getElementById('error').textContent = 'Ошибка VK ID: ' + (err.message || err);
-          });
-
-        oneTap.render({ container: document.getElementById('VkIdSdkOneTap') });
-
-      } else {
-        document.getElementById('error').textContent = 'Ошибка загрузки VKID SDK!';
-      }
+      oneTap.render({ container: document.getElementById('VkIdSdkOneTap') });
     })();
   </script>
 </body>

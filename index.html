@@ -2,259 +2,302 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Магический бот — Фокусник Альтаир</title>
-  <!-- Google Fonts: Marcellus SC и Roboto Slab -->
-  <link href="https://fonts.googleapis.com/css2?family=Marcellus+SC:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Фокусник Альтаир — Магический бот-помощник</title>
+  <!-- VK ID SDK -->
+  <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+  <!-- Google Fonts: HQY Savers Text (заменитель, если нет — Inter) -->
+  <link href="https://fonts.googleapis.com/css2?family=Yeseva+One&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --violet: #7847c7;
-      --turquoise: #1de9b6;
-      --gold: #ffe082;
-      --dark: #1e1733;
-      --white: #fff;
-      --light-gold: #fff7d6;
-      --shadow: 0 8px 32px 0 rgba(40,20,70,0.14);
+    html, body {
+      min-height: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
     }
     body {
+      /* Магический градиент — фиолетовый -> бирюза */
+      background: linear-gradient(135deg, #7a5cff 0%, #25e2ea 100%);
+      font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
+      color: #222;
       min-height: 100vh;
-      margin: 0;
-      font-family: 'Roboto Slab', 'Marcellus SC', serif;
-      background: linear-gradient(135deg, #764ba2 0%, #667eea 80%, #1de9b6 100%);
       display: flex;
       align-items: center;
       justify-content: center;
+      overflow-x: hidden;
     }
-    .magic-bg {
+    .magic-bg-anim {
       position: fixed;
-      inset: 0;
-      z-index: 0;
-      pointer-events: none;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      pointer-events: none; z-index: 0;
     }
-    .container {
+    .magic-card {
       position: relative;
       z-index: 1;
-      max-width: 420px;
-      width: 90vw;
-      margin: 48px auto;
-      background: var(--white);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 36px 32px 28px 32px;
-      text-align: center;
-      overflow: hidden;
-      animation: fadeInUp 1s cubic-bezier(.8,-0.1,.2,1.2);
-    }
-    @keyframes fadeInUp {
-      from { opacity:0; transform: translateY(60px);}
-      to { opacity:1; transform: translateY(0);}
-    }
-    .main-title {
-      font-family: 'Marcellus SC', serif;
-      font-size: 2.2em;
-      font-weight: 700;
-      color: var(--violet);
-      margin-bottom: 0.3em;
-      line-height: 1.16;
-      text-shadow: 0 2px 16px #d0b3ff70;
-      letter-spacing: 0.02em;
-    }
-    .subtitle {
-      font-family: 'Marcellus SC', serif;
-      font-size: 1.08em;
-      font-style: italic;
-      color: var(--turquoise);
-      margin-bottom: 20px;
-      margin-top: 0;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-    }
-    .desc {
-      color: #191523;
-      font-size: 1.03em;
-      font-family: 'Roboto Slab', serif;
-      margin-bottom: 20px;
-      line-height: 1.5;
-      font-weight: 400;
-      letter-spacing: 0.01em;
-    }
-    .magic-line {
-      color: #b69226;
-      font-size: 1em;
-      margin: 14px 0 18px 0;
-      font-family: 'Marcellus SC', serif;
-      letter-spacing: 0.01em;
-      opacity: 0.97;
-      animation: magicFade 2.5s infinite alternate;
-    }
-    .magic-note {
-      color: #b69226;
-      background: #fffbe8;
-      padding: 7px 0 5px 0;
-      border-radius: 12px;
-      margin: 7px 0 0 0;
-      font-size: 0.97em;
-      font-weight: 600;
-      text-align: center;
-      display: block;
-      letter-spacing: 0.01em;
-      box-shadow: 0 0 10px #ffe08255;
-      transition: background 0.3s;
-      font-family: 'Roboto Slab', serif;
-    }
-    @keyframes magicFade {
-      from { text-shadow: 0 0 2px #f9de91, 0 0 6px #fff176; }
-      to   { text-shadow: 0 0 10px #fff9c4, 0 0 24px #ffd740;}
-    }
-    .features {
+      background: #fff;
+      border-radius: 32px;
+      box-shadow: 0 8px 36px 0 rgba(32, 0, 64, 0.18), 0 1.5px 12px 0 rgba(64, 0, 128, 0.09);
+      width: 100%;
+      max-width: 480px;
+      margin: 48px 0;
+      padding: 42px 36px 36px 36px;
       display: flex;
-      gap: 10px;
+      flex-direction: column;
+      align-items: center;
+    }
+    .magic-header-mini {
+      font-family: 'Montserrat', Arial, sans-serif;
+      color: #9747ff;
+      font-size: 1.13em;
+      letter-spacing: 0.04em;
+      font-weight: 600;
+      margin-bottom: 0.15em;
+      text-align: center;
+      margin-top: 0;
+    }
+    .magic-header {
+      font-family: 'Yeseva One', 'Montserrat', cursive;
+      color: #792aff;
+      font-size: 2.14em;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 0.28em;
+      margin-top: 0;
+      letter-spacing: 0.02em;
+      line-height: 1.1;
+    }
+    .magic-wizard {
+      font-size: 1.5em;
+      margin-left: 0.18em;
+      vertical-align: middle;
+    }
+    .magic-subtitle {
+      color: #16d1c7;
+      font-size: 1.09em;
+      font-style: italic;
+      font-family: 'Montserrat', Arial, sans-serif;
+      text-align: center;
+      margin-bottom: 18px;
+      margin-top: -7px;
+      font-weight: 500;
+    }
+    .magic-description {
+      color: #111;
+      text-align: center;
+      font-size: 1.09em;
+      margin-bottom: 16px;
+      margin-top: 0;
+      font-family: 'Montserrat', Arial, sans-serif;
+      line-height: 1.5;
+    }
+    .magic-feature-block {
+      margin: 18px 0 22px 0;
+      font-size: 1.05em;
+      text-align: center;
+    }
+    .magic-feature-block strong {
+      color: #ffc701;
+      font-weight: 700;
+      font-size: 1.05em;
+    }
+    .magic-feature-block .magic-wand {
+      font-size: 1.15em;
+      vertical-align: baseline;
+      margin-left: 0.16em;
+    }
+    .magic-cards {
+      display: flex;
+      gap: 12px;
       justify-content: center;
-      margin: 20px 0 16px 0;
+      margin-bottom: 28px;
+      margin-top: 7px;
       flex-wrap: wrap;
     }
-    .feat-card {
-      background: var(--violet);
-      color: var(--white);
+    .magic-card-feature {
+      background: linear-gradient(98deg, #ebdbff 0%, #eafffa 100%);
+      color: #5921a2;
       border-radius: 16px;
-      padding: 13px 16px;
-      font-size: 1em;
-      font-weight: 500;
-      margin: 3px 0;
-      box-shadow: 0 2px 10px #c2a6e99a;
-      min-width: 110px;
-      transition: background 0.2s, transform 0.12s;
-      cursor: default;
-      user-select: none;
+      font-size: 1.01em;
+      font-weight: 600;
+      padding: 8px 16px;
+      box-shadow: 0 1.5px 9px 0 rgba(120, 88, 255, 0.08);
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-family: 'Roboto Slab', serif;
-      animation: fadeInUp 1.4s cubic-bezier(.8,-0.1,.2,1.2);
+      gap: 7px;
+      transition: box-shadow 0.19s;
+    }
+    .magic-card-feature .icon {
+      font-size: 1.2em;
+      margin-bottom: -2px;
     }
     .magic-btn {
-      display: inline-block;
-      background: linear-gradient(90deg, #25e6bc 10%, #6e74e9 100%);
+      background: linear-gradient(95deg, #2cf7ea 0%, #7a5cff 100%);
       color: #fff;
-      font-size: 1.18em;
+      font-size: 1.17em;
       font-weight: 700;
-      font-family: 'Marcellus SC', serif;
-      padding: 14px 20px 12px 20px;
       border: none;
       border-radius: 18px;
-      box-shadow: 0 2px 14px #79e2c861, 0 0px 0 #fff;
+      padding: 15px 0;
+      width: 100%;
+      margin: 0 0 17px 0;
       cursor: pointer;
-      margin: 24px 0 8px 0;
+      box-shadow: 0 3px 16px 0 rgba(100,80,255,0.14);
+      letter-spacing: 0.02em;
+      transition: filter 0.17s, transform 0.1s;
       text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: transform 0.13s, box-shadow 0.16s;
-      position: relative;
-      overflow: hidden;
-      animation: pulseBtn 2.2s infinite alternate;
+      text-align: center;
+      display: block;
     }
-    .magic-btn:active, .magic-btn:focus {
-      transform: scale(0.97);
-      box-shadow: 0 0px 6px #79e2c888;
+    .magic-btn:hover, .magic-btn:focus {
+      filter: brightness(1.1) drop-shadow(0 0 5px #bdb6ff);
+      transform: translateY(-2px) scale(1.015);
       outline: none;
     }
-    @keyframes pulseBtn {
-      from { box-shadow: 0 2px 18px #c8fbe9cc; }
-      to   { box-shadow: 0 4px 30px #e1e4ff77;}
-    }
-    .policy-link {
-      color: #97730f;
-      text-decoration: underline;
-      font-size: 0.98em;
-      font-weight: 500;
-    }
-    .policy-link:hover {
-      color: #b69226;
-      text-decoration: underline;
-    }
-    .footer {
-      color: #66646e;
-      font-size: 0.93em;
-      margin-top: 12px;
+    .magic-footer {
+      margin-top: 13px;
+      font-size: 0.99em;
+      color: #2d2340;
       text-align: center;
-      font-family: 'Roboto Slab', serif;
-      word-break: break-all;
+      font-family: 'Montserrat', Arial, sans-serif;
     }
-    .contact-link {
-      color: #228ca3;
+    .magic-footer .policy-link {
+      color: #ffbb22;
+      text-decoration: underline dotted;
+      margin: 0 5px;
+    }
+    .magic-footer .policy-link:hover {
+      color: #eea800;
+    }
+    .magic-footer .email-link {
+      color: #16d1c7;
       text-decoration: underline;
     }
-    .contact-link:hover {
-      color: #1e1733;
-    }
-    /* Анимация магических звёздочек */
-    .star {
-      position: absolute;
-      font-size: 1.6em;
-      opacity: 0.14;
-      animation: stars 3.2s linear infinite;
-      pointer-events: none;
-    }
-    .star-1 { left: 22%; top: 18%; animation-delay: 0s;}
-    .star-2 { right: 19%; top: 13%; font-size:2.1em; animation-delay: .7s;}
-    .star-3 { left: 16%; bottom: 14%; font-size:1.3em; animation-delay: 1.1s;}
-    .star-4 { right: 15%; bottom: 21%; font-size:1.8em; animation-delay: 1.6s;}
-    .star-5 { left: 48%; top: 24%; font-size:1.1em; animation-delay: 2.4s;}
-    @keyframes stars {
-      0%   { opacity: 0.13; transform: scale(0.9) rotate(0deg);}
-      47%  { opacity: 0.23;}
-      60%  { opacity: 0.35; transform: scale(1.3) rotate(19deg);}
-      100% { opacity: 0.11; transform: scale(0.7) rotate(-30deg);}
-    }
+    /* --- Медиа-адаптация --- */
     @media (max-width: 600px) {
-      .container { padding: 19px 4vw 20px 4vw; }
-      .main-title { font-size: 1.28em;}
-      .features { flex-direction: column; gap: 0;}
-      .feat-card { min-width: 90px; font-size:0.97em;}
-      .magic-btn { font-size: 1em; padding: 13px 0; width: 97%; }
+      .magic-card { max-width: 98vw; padding: 20px 6vw 20px 6vw; border-radius: 19px;}
+      .magic-header { font-size: 1.29em; }
+      .magic-header-mini { font-size: 1em;}
+      .magic-btn { font-size: 1.01em; border-radius: 14px; }
+      .magic-footer { font-size: 0.93em; }
+      .magic-card-feature { padding: 8px 8px;}
     }
   </style>
 </head>
 <body>
-  <!-- Магические анимированные звёздочки -->
-  <div class="magic-bg">
-    <span class="star star-1">✨</span>
-    <span class="star star-2">🟣</span>
-    <span class="star star-3">🔮</span>
-    <span class="star star-4">⭐</span>
-    <span class="star star-5">🪄</span>
-  </div>
-  <div class="container">
-    <div class="main-title">
-      Магический бот-помощник<br>Фокусник Альтаир 🧙🏼‍♂️
+  <!-- Магическая анимация (звёздочки и круги) -->
+  <canvas class="magic-bg-anim" id="magic-bg"></canvas>
+
+  <div class="magic-card">
+    <div class="magic-header-mini">Магический бот-помощник</div>
+    <div class="magic-header">Фокусник Альтаир <span class="magic-wizard">🧙🏼‍♂️</span></div>
+
+    <div class="magic-subtitle">Помогает сосредоточиться на важном и не залипнуть в ленте</div>
+    
+    <div class="magic-description">
+      Этот бот показывает только свежие и важные новости из ваших VK-групп прямо в Telegram.<br>
+      Без лишних хлопот — магия удобства и приватности!
     </div>
-    <div class="subtitle">
-      <span style="font-style:italic;">Помогает сосредоточиться на важном и не залипнуть в ленте</span>
+
+    <div class="magic-feature-block">
+      <strong>Пусть цифровая лента работает на тебя, а не наоборот!</strong><br>
+      Просто запусти волшебство и наслаждайся результатом <span class="magic-wand">🪄</span>
     </div>
-    <div class="desc">
-      Этот бот умеет в одно касание показывать новости из ваших любимых VK-групп прямо в Telegram.<br>
-      Без лишних хлопот — только самые важные обновления, с магическим удобством и заботой о вашей приватности ✨
+    <div class="magic-cards">
+      <div class="magic-card-feature"><span class="icon">🟣</span>Всегда свежая лента VK</div>
+      <div class="magic-card-feature"><span class="icon">🔒</span>Безопасная интеграция с Telegram</div>
+      <div class="magic-card-feature"><span class="icon">⭐</span>Просто и магически!</div>
     </div>
-    <div class="magic-line">
-      Пусть цифровая лента работает на тебя, а не наоборот<br>
-      Просто запусти волшебство и наслаждайся результатом 💫
-    </div>
-    <div class="features">
-      <div class="feat-card">Всегда свежая лента VK 🟣</div>
-      <div class="feat-card">Безопасная интеграция с Telegram 🔒</div>
-      <div class="feat-card">Просто быстро магически ⭐</div>
-    </div>
-    <a class="magic-btn" href="https://t.me/mytestvk_bot" target="_blank" rel="noopener">
-      Перейти в Telegram и начать магию 🔮
-    </a>
-    <div class="magic-note">
-      Бот использует безопасную авторизацию VK ID<br>
-      Все данные под охраной магической приватности<br>
-      <a href="https://api.fokusnikaltair.xyz/privacy.html" class="policy-link" target="_blank">Политика конфиденциальности</a>
-    </div>
-    <div class="footer">
-      Связаться с магистром бота: <a class="contact-link" href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
+    <a class="magic-btn" href="https://t.me/mytestvk_bot" target="_blank" rel="noopener">Перейти в Telegram и начать магию&nbsp;🔮</a>
+
+    <div class="magic-footer">
+      Бот использует безопасную авторизацию VK ID.<br>
+      Все данные под охраной магической приватности.<br>
+      <a class="policy-link" href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a><br>
+      Связаться с магистром: <a class="email-link" href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
     </div>
   </div>
+
+  <!-- Скрипт анимации -->
+  <script>
+    // ====== Магическая анимация: парящие звёзды и кольца ======
+    const canvas = document.getElementById('magic-bg');
+    const ctx = canvas.getContext('2d');
+    let W, H, stars = [];
+
+    function resize() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      canvas.width = W;
+      canvas.height = H;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function randomColor() {
+      const colors = ['#fff1b2', '#ffd6e3', '#b2e9ff', '#cabdff', '#ffeeba'];
+      return colors[Math.floor(Math.random() * colors.length)];
+    }
+
+    function createStar() {
+      const size = Math.random() > 0.68 ? 24 : 16;
+      return {
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: size / 2,
+        speed: 0.25 + Math.random() * 0.18,
+        color: randomColor(),
+        type: Math.random() > 0.73 ? 'ring' : 'star'
+      };
+    }
+
+    function drawStar(s) {
+      ctx.save();
+      ctx.globalAlpha = 0.4;
+      ctx.translate(s.x, s.y);
+      if (s.type === 'star') {
+        ctx.beginPath();
+        for (let i = 0; i < 5; i++) {
+          ctx.lineTo(
+            s.r * Math.cos((18 + i * 72) * Math.PI / 180),
+            s.r * Math.sin((18 + i * 72) * Math.PI / 180)
+          );
+          ctx.lineTo(
+            s.r / 2.1 * Math.cos((54 + i * 72) * Math.PI / 180),
+            s.r / 2.1 * Math.sin((54 + i * 72) * Math.PI / 180)
+          );
+        }
+        ctx.closePath();
+        ctx.fillStyle = s.color;
+        ctx.shadowColor = s.color;
+        ctx.shadowBlur = 12;
+        ctx.fill();
+      } else {
+        ctx.beginPath();
+        ctx.arc(0, 0, s.r, 0, 2 * Math.PI, false);
+        ctx.lineWidth = 3;
+        ctx.strokeStyle = s.color;
+        ctx.shadowColor = s.color;
+        ctx.shadowBlur = 10;
+        ctx.stroke();
+      }
+      ctx.restore();
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, W, H);
+      for (let s of stars) {
+        s.y += s.speed;
+        if (s.y > H + s.r) {
+          s.x = Math.random() * W;
+          s.y = -s.r;
+        }
+        drawStar(s);
+      }
+      requestAnimationFrame(animate);
+    }
+
+    // Запуск анимации
+    stars = Array.from({length: 8}, createStar);
+    animate();
+  </script>
 </body>
 </html>

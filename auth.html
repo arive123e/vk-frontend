@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Войти через VK — Фокусник Альтаир</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Marcellus+SC:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Roboto Slab', 'Marcellus SC', serif;
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 80%, #1de9b6 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .container {
+      background: #fff;
+      border-radius: 28px;
+      box-shadow: 0 8px 32px 0 rgba(40,20,70,0.14);
+      padding: 36px 32px 28px 32px;
+      text-align: center;
+      max-width: 420px;
+      width: 90vw;
+      margin: 48px auto;
+      animation: fadeInUp 1s cubic-bezier(.8,-0.1,.2,1.2);
+    }
+    .main-title {
+      font-family: 'Marcellus SC', serif;
+      font-size: 1.7em;
+      font-weight: 700;
+      color: #7847c7;
+      margin-bottom: 0.5em;
+    }
+    #status {
+      color: #7847c7;
+      margin-bottom: 16px;
+      margin-top: 7px;
+      font-size: 1.04em;
+      min-height: 2.5em;
+    }
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(60px);}
+      to { opacity:1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="main-title">
+      Авторизация через VK ID<br>для Telegram-бота 🧙🏼‍♂️
+    </div>
+    <div id="vkid-btn"></div>
+    <div id="status"></div>
+  </div>
+  <script src="https://unpkg.com/@vkid/sdk@2.5.2/dist-sdk/umd/index.js"></script>
+  <script>
+    // Получаем tg_id из строки запроса
+    function getTgId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('tg_id');
+    }
+    function setStatus(msg) {
+      document.getElementById('status').innerHTML = msg;
+    }
+
+    const tg_id = getTgId();
+    if (!tg_id) {
+      setStatus('Ошибка: не передан Telegram ID (tg_id)');
+      document.getElementById('vkid-btn').style.display = 'none';
+    } else {
+      setStatus('Используйте VK ID для входа.');
+      window.VKIDSDK.Config.init({
+        app: 53336238,
+        redirectUrl: '', // не нужен, будем обрабатывать code сами
+        responseMode: window.VKIDSDK.ConfigResponseMode.Code, // получаем code, не token
+        source: window.VKIDSDK.ConfigSource.LOWCODE,
+        scope: 'groups',
+        state: tg_id
+      });
+      const btn = new window.VKIDSDK.Button();
+      btn.render({ container: document.getElementById('vkid-btn') })
+        .on(window.VKIDSDK.ButtonEvents.SUCCESS, function(payload) {
+          // code и state (tg_id) приходят сюда
+          setStatus('Авторизация VK прошла, сохраняем связь...');
+          fetch(`/auth/vk/callback?code=${encodeURIComponent(payload.code)}&state=${encodeURIComponent(payload.state)}`)
+            .then(r => r.text())
+            .then(txt => {
+              setStatus(txt);
+            })
+            .catch(e => setStatus('Ошибка обмена кода на токен: ' + e.message));
+        })
+        .on(window.VKIDSDK.ButtonEvents.ERROR, function(err) {
+          setStatus('Ошибка VK ID: ' + JSON.stringify(err));
+        });
+    }
+  </script>
+</body>
+</html>

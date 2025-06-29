@@ -74,7 +74,7 @@
       setStatus('Используйте VK ID для входа.');
       window.VKIDSDK.Config.init({
         app: 53336238,
-        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // обязательно!
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback',
         responseMode: window.VKIDSDK.ConfigResponseMode.Code,
         source: window.VKIDSDK.ConfigSource.LOWCODE,
         scope: 'groups',
@@ -89,10 +89,19 @@
       })
       .on(window.VKIDSDK.WidgetEvents.ERROR, function(err) {
         setStatus('Ошибка VK ID: ' + JSON.stringify(err));
+        console.error('[VKID ERROR]', err);
       })
       .on(window.VKIDSDK.OneTapInternalEvents.LOGIN_SUCCESS, function(payload) {
         setStatus('Обработка VK ID...');
-        // payload содержит code, state, code_verifier
+        // Печатаем всё, что пришло
+        console.log('[VKID LOGIN_SUCCESS payload]', payload);
+
+        // payload должен содержать code, state, code_verifier!
+        if (!payload.code_verifier) {
+          setStatus('❌ Ошибка: code_verifier не пришёл от VKID SDK. Проверьте конфиг, версию SDK или браузер!');
+          return;
+        }
+
         // Передаём всё это на бэкенд!
         const params = new URLSearchParams({
           code: payload.code,

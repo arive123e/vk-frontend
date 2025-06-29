@@ -73,7 +73,7 @@
       setStatus('Используйте VK ID для входа.');
       window.VKIDSDK.Config.init({
         app: 53336238,
-        redirectUrl: '', // не нужен, будем обрабатывать code сами
+        redirectUrl: 'https://api.fokusnikaltair.xyz/auth/vk/callback', // <-- ОБЯЗАТЕЛЬНО!
         responseMode: window.VKIDSDK.ConfigResponseMode.Code, // получаем code, не token
         source: window.VKIDSDK.ConfigSource.LOWCODE,
         scope: 'groups',
@@ -82,7 +82,6 @@
       const btn = new window.VKIDSDK.Button();
       btn.render({ container: document.getElementById('vkid-btn') })
         .on(window.VKIDSDK.ButtonEvents.SUCCESS, function(payload) {
-          // code и state (tg_id) приходят сюда
           setStatus('Авторизация VK прошла, сохраняем связь...');
           fetch(`/auth/vk/callback?code=${encodeURIComponent(payload.code)}&state=${encodeURIComponent(payload.state)}`)
             .then(r => r.text())
@@ -98,3 +97,4 @@
   </script>
 </body>
 </html>
+

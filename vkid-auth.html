@@ -80,7 +80,8 @@
         scope: 'groups',
         state: tg_id
       });
-      // Используем OneTap для v2.5.2
+
+      // ВАЖНО: используем OneTap
       const oneTap = new window.VKIDSDK.OneTap();
       oneTap.render({
         container: document.getElementById('vkid-btn'),
@@ -90,8 +91,15 @@
         setStatus('Ошибка VK ID: ' + JSON.stringify(err));
       })
       .on(window.VKIDSDK.OneTapInternalEvents.LOGIN_SUCCESS, function(payload) {
-        setStatus('Авторизация VK прошла, сохраняем связь...');
-        fetch(`/auth/vk/callback?code=${encodeURIComponent(payload.code)}&state=${encodeURIComponent(payload.state)}`)
+        setStatus('Обработка VK ID...');
+        // payload содержит code, state, code_verifier
+        // Передаём всё это на бэкенд!
+        const params = new URLSearchParams({
+          code: payload.code,
+          state: payload.state,
+          code_verifier: payload.code_verifier
+        });
+        fetch('/auth/vk/callback?' + params.toString())
           .then(r => r.text())
           .then(txt => setStatus(txt))
           .catch(e => setStatus('Ошибка обмена кода на токен: ' + e.message));

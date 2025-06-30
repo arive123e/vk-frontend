@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <title>Обработка VK ID</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #fff;
+      color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    #status {
+      font-size: 1.1em;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div id="status">Авторизация VK ID...</div>
+  <script>
+    // Получаем параметры из URL
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get('code');
+    const state = params.get('state');
+    const device_id = params.get('device_id');
+    const code_verifier = sessionStorage.getItem('code_verifier');
+
+    async function sendToBackend() {
+      document.getElementById('status').textContent = "Обмениваем токен...";
+      try {
+        const response = await fetch('/auth/vk/callback', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ code, state, device_id, code_verifier })
+        });
+        const text = await response.text();
+        document.getElementById('status').innerHTML = text || "Авторизация завершена!";
+      } catch (e) {
+        document.getElementById('status').textContent = "Ошибка обмена: " + e;
+      }
+    }
+
+    if (code && device_id && code_verifier) {
+      sendToBackend();
+    } else {
+      document.getElementById('status').textContent = "Ошибка: Не все параметры найдены. Попробуйте авторизоваться снова.";
+    }
+  </script>
+</body>
+</html>

@@ -14,8 +14,10 @@
       height: 100vh;
     }
     #status {
-      font-size: 1.1em;
+      font-size: 1.13em;
       text-align: center;
+      max-width: 440px;
+      line-height: 1.45;
     }
   </style>
 </head>
@@ -29,8 +31,17 @@
     const device_id = params.get('device_id');
     const code_verifier = sessionStorage.getItem('code_verifier');
 
+    function missingFields() {
+      let missing = [];
+      if (!code) missing.push('code');
+      if (!device_id) missing.push('device_id');
+      if (!state) missing.push('state');
+      if (!code_verifier) missing.push('code_verifier (хранится в sessionStorage, возможно, была закрыта вкладка)');
+      return missing;
+    }
+
     async function sendToBackend() {
-      document.getElementById('status').textContent = "Обмениваем токен...";
+      document.getElementById('status').textContent = "Обмениваем код VK ID на токены...";
       try {
         const response = await fetch('/auth/vk/callback', {
           method: 'POST',
@@ -39,15 +50,24 @@
         });
         const text = await response.text();
         document.getElementById('status').innerHTML = text || "Авторизация завершена!";
+        // Удаляем code_verifier из sessionStorage после успешной попытки
+        sessionStorage.removeItem('code_verifier');
       } catch (e) {
         document.getElementById('status').textContent = "Ошибка обмена: " + e;
       }
     }
 
-    if (code && device_id && code_verifier) {
+    if (code && device_id && state && code_verifier) {
       sendToBackend();
     } else {
-      document.getElementById('status').textContent = "Ошибка: Не все параметры найдены. Попробуйте авторизоваться снова.";
+      const missing = missingFields();
+      document.getElementById('status').innerHTML = `
+        <b>Ошибка: Не все параметры найдены!</b><br>
+        Не хватает: <span style="color:#7847c7">${missing.join(', ')}</span><br>
+        Попробуйте авторизоваться снова, не закрывая вкладку.<br>
+        <br>
+        <small>Если ошибка повторяется, очистите cookies и попробуйте еще раз.</small>
+      `;
     }
   </script>
 </body>

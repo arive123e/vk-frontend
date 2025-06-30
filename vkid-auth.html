@@ -2,143 +2,143 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8" />
-  <title>Авторизация VK ID — Фокусник Альтаир</title>
+  <title>Авторизация через VK ID — Фокусник Альтаир</title>
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <style>
     body {
+      min-height: 100vh;
+      margin: 0;
       font-family: Arial, sans-serif;
       background: linear-gradient(135deg, #764ba2 0%, #667eea 80%, #1de9b6 100%);
       display: flex;
       justify-content: center;
       align-items: center;
-      height: 100vh;
-      margin: 0;
     }
     .container {
       background: #fff;
-      border-radius: 20px;
-      padding: 32px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-      max-width: 400px;
+      border-radius: 24px;
+      padding: 36px 40px;
       text-align: center;
+      max-width: 400px;
+      width: 90vw;
+      box-shadow: 0 8px 32px rgba(40, 20, 70, 0.14);
+      animation: fadeInUp 1s cubic-bezier(.8,-0.1,.2,1.2);
     }
     h1 {
-      font-weight: 700;
       color: #7847c7;
-      margin-bottom: 24px;
+      font-weight: 600;
+      margin-bottom: 16px;
       font-size: 1.5rem;
     }
-    /* Кнопка авторизации VK ID по гайдам */
-    a.vkid-button {
+    #vk-auth-btn {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
       gap: 8px;
-      background: linear-gradient(90deg, #1de9b6 0%, #667eea 100%);
+      background-color: #0077FF;
       color: #fff;
       font-weight: 600;
-      font-size: 1rem;
+      font-size: 16pt;
       border-radius: 24px;
-      padding: 12px 28px;
+      padding: 6px 18px;
       text-decoration: none;
-      box-shadow: 0 4px 12px rgba(31,119,255,0.4);
+      box-shadow: 0 0 0 1px rgba(0, 119, 255, 0.5);
+      cursor: pointer;
       user-select: none;
       transition: filter 0.2s ease;
+      border: none;
+      outline: none;
     }
-    a.vkid-button:hover {
+    #vk-auth-btn:hover {
       filter: brightness(110%);
     }
-    a.vkid-button svg {
-      height: 20px;
-      width: 20px;
-      fill: #fff;
+    svg {
+      width: 28px;
+      height: 28px;
+      fill: white;
     }
-    .caption {
-      margin-top: 12px;
-      font-size: 0.9rem;
+    #status {
+      margin-top: 16px;
       color: #7847c7;
+      min-height: 2em;
+      font-weight: 500;
+    }
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(60px); }
+      to { opacity: 1; transform: translateY(0); }
     }
   </style>
 </head>
 <body>
   <div class="container">
     <h1>Авторизация через VK ID</h1>
-
-    <!-- Кнопка авторизации (перенаправляет на VK ID OAuth) -->
-    <a href="#" id="vk-auth-btn" class="vkid-button" aria-label="Войти через VK ID">
-      <!-- Официальный логотип VK ID в SVG -->
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="M3 3h18v18H3z" fill="none"/>
-        <path d="M14.5 7H12v10h2.5c.8 0 1.5-.7 1.5-1.5v-7c0-.8-.7-1.5-1.5-1.5zM7.5 7H5v10h2.5c.8 0 1.5-.7 1.5-1.5v-7c0-.8-.7-1.5-1.5-1.5z"/>
+    <button id="vk-auth-btn" aria-label="Войти через VK ID">
+      <svg viewBox="0 0 28 28" aria-hidden="true" focusable="false" >
+        <path d="M14 0C6.27 0 0 6.27 0 14s6.27 14 14 14 14-6.27 14-14S21.73 0 14 0zm3.1 19.5h-1.65c-.24 0-.47-.07-.67-.19L14 17.56l-1.78 1.75a.977.977 0 01-1.41-1.35l2.24-2.21-2.24-2.19a.974.974 0 011.41-1.35l1.78 1.75 1.78-1.75a.977.977 0 011.41 1.35l-2.24 2.19 2.24 2.21c.2.12.32.33.32.58 0 .39-.32.7-.7.7z" />
       </svg>
       Войти через VK
-    </a>
-    <p class="caption">Нажмите кнопку для авторизации через VK ID</p>
+    </button>
+    <div id="status"></div>
   </div>
 
   <script>
-    // Конфигурация
-    const client_id = '53336238';  // твой client_id
-    const redirect_uri = 'https://api.fokusnikaltair.xyz/auth/vk/callback';  // твой callback
-    const scope = 'groups'; // нужные права, если надо
-    const state = new URLSearchParams(window.location.search).get('tg_id') || ''; // передаём Telegram ID в state
+    // Получаем tg_id из URL (Telegram ID)
+    function getTgId() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('tg_id');
+    }
 
-    // Функция генерации code_challenge и code_verifier для PKCE
-    // Для простоты — сгенерируем code_verifier случайно и сохраним в localStorage
-    function generateRandomString(length) {
+    // Генерация случайной строки (code_verifier)
+    function generateCodeVerifier(length = 128) {
       const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
       let result = '';
-      for(let i=0; i<length; i++) {
-        result += charset.charAt(Math.floor(Math.random() * charset.length));
+      const array = new Uint32Array(length);
+      window.crypto.getRandomValues(array);
+      for (let i = 0; i < length; i++) {
+        result += charset[array[i] % charset.length];
       }
       return result;
     }
 
-    async function sha256(plain) {
+    // Base64 URL-encode
+    function base64UrlEncode(buffer) {
+      return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    // Генерация SHA256 хеша и Base64URL кодирование (code_challenge)
+    async function generateCodeChallenge(codeVerifier) {
       const encoder = new TextEncoder();
-      const data = encoder.encode(plain);
-      const hash = await crypto.subtle.digest('SHA-256', data);
-      return hash;
+      const data = encoder.encode(codeVerifier);
+      const hash = await window.crypto.subtle.digest('SHA-256', data);
+      return base64UrlEncode(hash);
     }
 
-    function base64urlencode(a) {
-      let str = '';
-      const bytes = new Uint8Array(a);
-      const len = bytes.byteLength;
-      for (let i=0; i<len; i++) {
-        str += String.fromCharCode(bytes[i]);
+    async function startAuth() {
+      const tg_id = getTgId();
+      const statusEl = document.getElementById('status');
+      if (!tg_id) {
+        statusEl.textContent = 'Ошибка: не передан Telegram ID (tg_id)';
+        return;
       }
-      return btoa(str).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+      statusEl.textContent = 'Подготавливаем авторизацию...';
+
+      const client_id = '53336238'; // Ваша app_id VK ID
+      const redirect_uri = encodeURIComponent('https://api.fokusnikaltair.xyz/auth/vk/callback');
+      const scope = 'groups'; // если нужно изменить — здесь
+      const response_type = 'code';
+      const state = encodeURIComponent(tg_id);
+
+      const codeVerifier = generateCodeVerifier();
+      sessionStorage.setItem('code_verifier', codeVerifier);
+      const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+      const url = `https://oauth.vk.com/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}&response_type=${response_type}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256&v=5.131`;
+
+      // При переходе по URL — начинается аутентификация
+      window.location.href = url;
     }
 
-    async function pkceChallengeFromVerifier(v) {
-      const hashed = await sha256(v);
-      return base64urlencode(hashed);
-    }
-
-    document.getElementById('vk-auth-btn').addEventListener('click', async (e) => {
-      e.preventDefault();
-
-      // Генерируем code_verifier и code_challenge
-      const code_verifier = generateRandomString(64);
-      const code_challenge = await pkceChallengeFromVerifier(code_verifier);
-
-      // Сохраняем code_verifier в localStorage для использования на сервере при callback
-      localStorage.setItem('vk_code_verifier', code_verifier);
-
-      // Собираем URL авторизации VK ID
-      const authUrl = new URL('https://id.vk.com/oauth/authorize');
-      authUrl.searchParams.set('client_id', client_id);
-      authUrl.searchParams.set('redirect_uri', redirect_uri);
-      authUrl.searchParams.set('response_type', 'code');
-      authUrl.searchParams.set('code_challenge_method', 'S256');
-      authUrl.searchParams.set('code_challenge', code_challenge);
-      authUrl.searchParams.set('state', state);
-      authUrl.searchParams.set('scope', scope);
-
-      // Переходим на страницу авторизации
-      window.location.href = authUrl.toString();
-    });
+    document.getElementById('vk-auth-btn').addEventListener('click', startAuth);
   </script>
 </body>
 </html>

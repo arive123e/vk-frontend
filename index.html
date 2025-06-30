@@ -162,6 +162,41 @@
       from { box-shadow: 0 2px 18px #c8fbe9cc; }
       to   { box-shadow: 0 4px 30px #e1e4ff77;}
     }
+    /* 🔄 NEW: VK ID button styles */
+    #vk-auth-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #0077FF;
+      color: #fff;
+      font-family: Arial, sans-serif;
+      font-weight: 400;
+      font-size: 16px;
+      border: none;
+      border-radius: 24px;
+      height: 48px;
+      min-width: 220px;
+      padding: 0 24px;
+      margin: 18px 0 10px 0;
+      cursor: pointer;
+      box-shadow: none;
+      transition: filter 0.2s;
+    }
+    #vk-auth-btn:hover {
+      filter: brightness(110%);
+    }
+    #vk-auth-btn svg {
+      flex-shrink: 0;
+    }
+    #vk-status {
+      min-height: 24px;
+      color: #7847c7;
+      font-size: 1em;
+      margin: 8px 0 0 0;
+      font-family: 'Roboto Slab', serif;
+      font-weight: 500;
+      text-align: center;
+    }
     .policy-link {
       color: #97730f;
       text-decoration: underline;
@@ -187,7 +222,6 @@
     .contact-link:hover {
       color: #1e1733;
     }
-    /* Анимация магических звёздочек */
     .star {
       position: absolute;
       font-size: 1.6em;
@@ -212,6 +246,7 @@
       .features { flex-direction: column; gap: 0;}
       .feat-card { min-width: 90px; font-size:0.97em;}
       .magic-btn { font-size: 1em; padding: 13px 0; width: 97%; }
+      #vk-auth-btn { font-size: 0.98em; padding: 0 8vw; min-width: 150px;}
     }
   </style>
 </head>
@@ -244,6 +279,16 @@
       <div class="feat-card">Безопасная интеграция с Telegram 🔒</div>
       <div class="feat-card">Просто быстро магически ⭐</div>
     </div>
+    <!-- 🔄 NEW: Кнопка авторизации VK ID -->
+    <button id="vk-auth-btn" aria-label="Войти с VK ID">
+      <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28" style="margin-right: 10px;">
+        <rect width="28" height="28" rx="14" fill="#fff"/>
+        <path d="M14 0C6.27 0 0 6.27 0 14s6.27 14 14 14 14-6.27 14-14S21.73 0 14 0zm5.32 10.24c.12-.41 0-.67-.58-.67h-1.93c-.48 0-.7.24-.81.52 0 0-1 2.41-2.4 3.97-.46.46-.67.6-.93.6-.13 0-.31-.13-.31-.52v-3.81c0-.45-.13-.67-.52-.67h-2.98c-.29 0-.48.21-.48.43 0 .41.61.5.67 1.67v2.49c0 .55-.1.65-.3.65-.59 0-2.02-2.4-2.87-5.13-.15-.44-.32-.57-.74-.57H4.56c-.41 0-.41.19-.41.46 0 .46.7 2.88 3.37 6.06 1.41 1.69 2.89 1.63 2.89 1.63h1.18c.41 0 .56-.19.61-.42 0 0 .16-.39.23-.53.07-.15.21-.18.31-.18.09 0 .22.03.33.13.1.09.13.21.13.33v1.09c0 .32.08.45.47.45h1.99c.27 0 .45-.12.49-.39.04-.24-.07-.38-.28-.46-.39-.13-1.18-.42-1.68-1.11-.14-.18-.22-.38-.18-.6.06-.32.29-.53.62-.53h1.68c.47 0 .83-.11 1.13-.32.3-.21.54-.55.73-1 .19-.45.29-.94.29-1.48v-1.06c0-.46-.17-.68-.5-.68-.28 0-.46.19-.54.41z" fill="#0077FF"/>
+      </svg>
+      Войти с VK ID
+    </button>
+    <div id="vk-status"></div>
+    <!-- Кнопка Telegram -->
     <a class="magic-btn" href="https://t.me/mytestvk_bot" target="_blank" rel="noopener">
       Перейти в Telegram и начать магию 🔮
     </a>
@@ -256,5 +301,54 @@
       Связаться с магистром бота: <a class="contact-link" href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
     </div>
   </div>
+  <!-- 🔄 NEW: JS для PKCE и перехода на VK ID -->
+  <script>
+    // Генерация случайного code_verifier
+    function generateCodeVerifier(length = 128) {
+      const charset = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-._~';
+      let result = '';
+      const array = new Uint32Array(length);
+      window.crypto.getRandomValues(array);
+      for (let i = 0; i < length; i++) {
+        result += charset[array[i] % charset.length];
+      }
+      return result;
+    }
+
+    // Base64 URL-encode
+    function base64UrlEncode(buffer) {
+      return btoa(String.fromCharCode(...new Uint8Array(buffer)))
+        .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+    }
+
+    // Генерация SHA256 хеша и Base64URL кодирование (code_challenge)
+    async function generateCodeChallenge(codeVerifier) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(codeVerifier);
+      const hash = await window.crypto.subtle.digest('SHA-256', data);
+      return base64UrlEncode(hash);
+    }
+
+    async function startVkAuth() {
+      const statusEl = document.getElementById('vk-status');
+      statusEl.textContent = 'Готовим авторизацию VK ID...';
+
+      const client_id = '53336238';
+      const redirect_uri = encodeURIComponent('https://api.fokusnikaltair.xyz/vk-callback.html');
+      const scope = 'groups';
+      const response_type = 'code';
+      const state = Date.now().toString(); // Можно вставить tg_id, если нужно
+
+      const codeVerifier = generateCodeVerifier();
+      sessionStorage.setItem('code_verifier', codeVerifier);
+      const codeChallenge = await generateCodeChallenge(codeVerifier);
+
+      const url = `https://id.vk.com/authorize?client_id=${client_id}&redirect_uri=${redirect_uri}&scope=${scope}&response_type=${response_type}&state=${state}&code_challenge=${codeChallenge}&code_challenge_method=S256`;
+
+      window.location.href = url;
+    }
+
+    document.getElementById('vk-auth-btn').addEventListener('click', startVkAuth);
+  </script>
 </body>
 </html>

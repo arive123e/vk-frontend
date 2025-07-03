@@ -5,203 +5,218 @@
   <title>Твоя волшебная лента VK — прямо в Telegram</title>
   <link rel="icon" type="image/png" href="/star.png">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
   <style>
-    html, body {
-      height: 100%;
-      min-height: 100dvh;
-      margin: 0;
-      padding: 0;
-      background: linear-gradient(135deg, #764ba2 0%, #667eea 80%, #1de9b6 100%);
-    }
     body {
-      font-family: 'Marcellus SC', 'Roboto Slab', serif;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-    }
-    .container {
-      background: #fff;
-      border-radius: 28px;
-      box-shadow: 0 8px 32px 0 rgba(40,20,70,0.14);
-      max-width: 500px;
-      width: 96vw;
-      margin: 48px auto 24px auto;
-      padding: 36px 32px 30px 32px;
-      position: relative;
-      z-index: 1;
-    }
-    .main-title {
-      font-family: 'Marcellus SC', serif;
-      font-size: 2.3em;
-      font-weight: bold;
-      color: #6242d1;
-      margin-bottom: 0.26em;
-      line-height: 1.13;
-      letter-spacing: 0.01em;
-      text-align: left;
-    }
-    .subtitle {
-      font-size: 1.1em;
-      color: #1acdc0;
-      margin-bottom: 30px;
-      text-align: left;
-    }
-    .magic-btn {
-      display: block;
-      margin: 0 0 34px 0;
-      background: #ffe082;
-      color: #2f2211;
-      font-family: 'Marcellus SC', serif;
-      font-size: 1.18em;
-      font-weight: 700;
-      border: none;
-      border-radius: 18px;
-      box-shadow: 0 2px 14px #f6e2a8b0, 0 0px 0 #fff;
-      padding: 14px 22px 12px 22px;
-      letter-spacing: 0.03em;
-      text-align: left;
-      text-decoration: none;
-      transition: background 0.16s;
-      width: 100%;
-      max-width: 290px;
-    }
-    .magic-btn:active { background: #ffc943; }
-    .card-section {
-      background: #fff;
-      border-radius: 20px;
-      box-shadow: 0 4px 20px #c2a6e932;
-      padding: 30px 25px 28px 25px;
-      margin-top: 10px;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: flex-start;
-      min-height: 310px;
-    }
-    .steps-list {
-      flex: 2;
+      min-height: 100vh;
+      margin: 0;
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 80%, #1de9b6 100%);
+      font-family: 'Montserrat', Arial, sans-serif;
       display: flex;
       flex-direction: column;
       align-items: flex-start;
-      justify-content: center;
-      gap: 0;
+      justify-content: flex-start;
+      padding: 0;
+    }
+    .main-content {
+      width: 100%;
+      max-width: 680px;
+      margin: 60px auto 0 48px; /* Слева отступ для заголовка и кнопки */
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      position: relative;
+    }
+    /* --- Обновлено: крупный заголовок и подзаголовок --- */
+    .big-title {
+      font-size: 2.35em;
+      font-weight: 700;
+      color: #fff;
+      margin-bottom: 6px;
+      line-height: 1.17;
+      text-shadow: 0 3px 18px #665ba5aa;
+      letter-spacing: 0.01em;
+    }
+    .subtitle {
+      color: #b5eaff;
+      font-size: 1.15em;
+      margin-bottom: 22px;
+      font-weight: 400;
+      letter-spacing: 0.01em;
+    }
+    /* --- Кнопка Telegram слева --- */
+    .tg-btn {
+      background: #e6bb54;
+      color: #282310;
+      font-size: 1.17em;
+      font-weight: bold;
+      padding: 14px 38px 12px 38px;
+      border: none;
+      border-radius: 15px;
+      box-shadow: 0 2px 18px #f9eab666;
+      margin-bottom: 36px;
+      cursor: pointer;
+      font-family: 'Montserrat', Arial, sans-serif;
+      transition: background .17s, box-shadow .19s;
+      margin-left: 0;
       margin-top: 0;
     }
-    .how-title {
-      font-family: 'Roboto Slab', serif;
-      font-size: 1.38em;
+    .tg-btn:hover {
+      background: #deb142;
+    }
+    /* --- Обновлено: только белый контейнер для раздела "Как это работает" и волшебника --- */
+    .work-container {
+      background: #fff;
+      border-radius: 26px;
+      box-shadow: 0 6px 34px 0 #c2b6e274;
+      padding: 42px 36px 38px 36px;
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      max-width: 690px;
+      min-width: 390px;
+      width: 100%;
+      min-height: 330px;
+    }
+    /* --- "Как это работает" как крупный заголовок контейнера --- */
+    .work-title {
+      font-size: 1.36em;
       font-weight: 700;
-      margin-bottom: 26px;
-      margin-top: 0;
-      color: #282533;
-      text-align: left;
+      color: #222;
+      margin-bottom: 20px;
+      font-family: 'Montserrat', Arial, sans-serif;
+      letter-spacing: 0.01em;
+    }
+    .work-steps {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      gap: 8px;
+      min-width: 215px;
     }
     .step-row {
       display: flex;
       align-items: center;
-      margin-bottom: 6px;
-      font-size: 1.09em;
-      font-family: 'Roboto Slab', serif;
-      color: #222;
-      font-weight: 500;
-      gap: 12px;
+      gap: 11px;
+      min-height: 56px;
     }
     .arrow-row {
-      height: 25px;
       display: flex;
       align-items: center;
       justify-content: flex-start;
-      margin: -4px 0 0 25px;
+      height: 26px;
+      margin-left: 26px;
+      margin-bottom: -3px;
     }
     .arrow-img {
+      width: 27px;
       height: 25px;
-      width: auto;
-      display: block;
-      margin: 0 auto;
+      object-fit: contain;
+      opacity: 0.75;
     }
-    .wizard-section {
-      flex: 1.3;
+    .step-img {
+      width: 42px;
+      height: 42px;
+      object-fit: contain;
+    }
+    .step-text {
+      font-size: 1.08em;
+      color: #232323;
+      font-weight: 500;
+      font-family: 'Montserrat', Arial, sans-serif;
+    }
+    /* --- Обновлено: увеличенный волшебник --- */
+    .wizard-side {
       display: flex;
-      align-items: flex-end;
+      flex-direction: column;
+      align-items: center;
       justify-content: flex-end;
-      min-width: 130px;
+      height: 100%;
+      margin-left: 14px;
     }
     .wizard-img {
-      width: 110px;
-      max-width: 100%;
+      width: 150px; /* Сделай больше если хочется! */
+      max-width: 180px;
       height: auto;
       display: block;
+      margin-bottom: 0;
     }
-    .info-footer {
-      color: #46747f;
+    /* --- Приватность и связь --- */
+    .privacy-footer {
+      margin-top: 28px;
       font-size: 0.98em;
-      margin-top: 25px;
-      text-align: left;
+      color: #27768a;
+      font-family: 'Montserrat', Arial, sans-serif;
     }
-    .policy-link {
-      color: #367486;
+    .privacy-link {
+      color: #2676a0;
+      text-decoration: underline;
+      margin-left: 4px;
+    }
+    .privacy-link:hover {
+      color: #15546e;
+    }
+    .contact-link {
+      color: #2587a7;
       text-decoration: underline;
       margin-left: 8px;
     }
-    .contact-link {
-      color: #287c9c;
-      text-decoration: underline;
-      margin-left: 0;
+    .contact-link:hover {
+      color: #12384c;
     }
     @media (max-width: 650px) {
-      .container { max-width: 99vw; padding: 8vw 2vw 8vw 2vw;}
-      .card-section { flex-direction: column; align-items: stretch; padding: 18px 8px 18px 8px;}
-      .wizard-section { justify-content: center; margin-top: 19px;}
-      .wizard-img { width: 90px;}
-      .main-title { font-size: 1.27em;}
-      .how-title { font-size: 1.11em;}
+      .main-content { margin-left: 1vw; max-width: 98vw;}
+      .work-container { flex-direction: column; align-items: flex-start; gap: 20px; padding: 18px 5vw 24px 5vw;}
+      .wizard-side { align-items: flex-end; margin-left: 0; }
+      .wizard-img { width: 120px; max-width: 44vw;}
+      .big-title { font-size: 1.19em;}
     }
   </style>
 </head>
 <body>
-  <div class="container">
-    <!-- Заголовок -->
-    <div class="main-title">Твоя волшебная лента VK —<br> прямо в <b style="color:#58d4c3;">Telegram</b></div>
+  <div class="main-content">
+    <!-- Заголовок и подзаголовок слева -->
+    <div class="big-title">Твоя волшебная лента VK —<br>прямо в <b style="color:#5ce6e6;">Telegram</b></div>
     <div class="subtitle">Мир, где нужные посты находят тебя сами.</div>
-    <!-- Кнопка Telegram слева -->
-    <a class="magic-btn" href="https://t.me/mytestvk_bot" target="_blank" rel="noopener">Войти в Telegram</a>
-    <!-- Белый контейнер -->
-    <div class="card-section">
-      <div class="steps-list">
-        <div class="how-title">Как это работает</div>
-        <!-- 1 -->
+    <a href="https://t.me/mytestvk_bot" class="tg-btn" target="_blank">Войти в Telegram</a>
+    <!-- Только контейнер "Как это работает" и волшебник -->
+    <div class="work-container">
+      <div class="work-steps">
+        <div class="work-title">Как это работает</div>
         <div class="step-row">
-          <img src="/magic.png" alt="Войти VK" style="height:32px;width:auto;">
-          Войти через VK
+          <img class="step-img" src="/magic.png" alt="Войти через VK">
+          <span class="step-text">Войти через VK</span>
         </div>
         <div class="arrow-row">
-          <img class="arrow-img" src="/arrow-down.png" alt="↓">
+          <img class="arrow-img" src="/arrow-down.png" alt="Дальше">
         </div>
-        <!-- 2 -->
         <div class="step-row">
-          <img src="/magic-ball.png" alt="Выбрать группы" style="height:32px;width:auto;">
-          Выбрать группы
+          <img class="step-img" src="/magic-ball.png" alt="Выбрать группы">
+          <span class="step-text">Выбрать группы</span>
         </div>
         <div class="arrow-row">
-          <img class="arrow-img" src="/arrow-down.png" alt="↓">
+          <img class="arrow-img" src="/arrow-down.png" alt="Дальше">
         </div>
-        <!-- 3 -->
         <div class="step-row">
-          <img src="/witch-hat.png" alt="Получать посты" style="height:32px;width:auto;">
-          Получать посты
+          <img class="step-img" src="/witch-hat.png" alt="Получать посты">
+          <span class="step-text">Получать посты</span>
         </div>
       </div>
-      <div class="wizard-section">
+      <!-- Волшебник -->
+      <div class="wizard-side">
         <img class="wizard-img" src="/wizard.png" alt="Проводник Альтаир">
       </div>
     </div>
-    <!-- Инфо-подвал -->
-    <div class="info-footer">
+    <!-- Приватность и контакт -->
+    <div class="privacy-footer">
       Все данные под охраной магической приватности.
-      <a class="policy-link" href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a>
-      <br>
+      <a class="privacy-link" href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a><br>
       Связаться с магистром бота: <a class="contact-link" href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
     </div>
   </div>
 </body>
 </html>
+

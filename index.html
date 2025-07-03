@@ -2,256 +2,285 @@
 <html lang="ru">
 <head>
   <meta charset="UTF-8">
-  <title>Магический бот — Фокусник Альтаир</title>
-  <!-- Google Fonts: Marcellus SC и Roboto Slab -->
+  <title>Твоя волшебная лента VK — прямо в Telegram</title>
+
+  <!-- Favicon (иконка сайта) -->
+  <link rel="icon" type="image/png" href="/star.png">
+
+  <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Marcellus+SC:wght@400;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- Meta preview (красивый баннер при шаринге) -->
+  <meta property="og:title" content="Магический бот-помощник Фокусник Альтаир">
+  <meta property="og:description" content="Помогает сосредоточиться на важном и не залипнуть в ленте">
+  <meta property="og:image" content="/wizard.png">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#6e74e9">
+
   <style>
     :root {
-      --violet: #7847c7;
-      --turquoise: #1de9b6;
+      --violet: #6e74e9;
       --gold: #ffe082;
-      --dark: #1e1733;
+      --gold-dark: #f3bc42;
       --white: #fff;
-      --light-gold: #fff7d6;
-      --shadow: 0 8px 32px 0 rgba(40,20,70,0.14);
+      --card-shadow: 0 8px 32px 0 rgba(40,20,70,0.10);
     }
     body {
-      min-height: 100vh;
       margin: 0;
       font-family: 'Roboto Slab', 'Marcellus SC', serif;
-      background: linear-gradient(135deg, #764ba2 0%, #667eea 80%, #1de9b6 100%);
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #764ba2 0%, #667eea 70%, #1de9b6 100%);
+      position: relative;
+      overflow-x: hidden;
     }
-    .magic-bg {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
+    /* --- Летающие иконки --- */
+    .magic-bg img {
+      position: absolute;
+      opacity: 0.15;
       pointer-events: none;
+      animation: float 7s ease-in-out infinite;
+      filter: drop-shadow(0 4px 12px #fff9);
     }
+    .icon-bottle      { left: 10vw;  top: 8vh;  width: 54px;  animation-delay: 0s;}
+    .icon-magic       { right: 11vw; top: 12vh; width: 40px;  animation-delay: .8s;}
+    .icon-magic-ball  { left: 12vw;  bottom: 12vh; width: 50px; animation-delay: 1.6s;}
+    .icon-magic-wand  { right: 13vw; bottom: 17vh; width: 44px; animation-delay: 2.3s;}
+    .icon-pot         { left: 40vw;  top: 3vh; width: 48px;   animation-delay: 3.1s;}
+    .icon-witch-hat   { right: 36vw; bottom: 6vh; width: 52px;animation-delay: 3.7s;}
+    @keyframes float {
+      0%   { transform: translateY(0px) rotate(-7deg);}
+      45%  { opacity: 0.22;}
+      55%  { transform: translateY(-22px) rotate(7deg); opacity: 0.19;}
+      100% { transform: translateY(0px) rotate(-7deg);}
+    }
+
+    /* --- Основной контейнер --- */
     .container {
+      max-width: 430px;
+      width: 94vw;
+      margin: 62px auto 44px auto;
+      background: var(--white);
+      border-radius: 30px;
+      box-shadow: var(--card-shadow);
+      padding: 36px 32px 30px 32px;
       position: relative;
       z-index: 1;
-      max-width: 420px;
-      width: 90vw;
-      margin: 48px auto;
-      background: var(--white);
-      border-radius: 28px;
-      box-shadow: var(--shadow);
-      padding: 36px 32px 28px 32px;
       text-align: center;
-      overflow: hidden;
-      animation: fadeInUp 1s cubic-bezier(.8,-0.1,.2,1.2);
     }
-    @keyframes fadeInUp {
-      from { opacity:0; transform: translateY(60px);}
-      to { opacity:1; transform: translateY(0);}
-    }
+    /* --- Верхний заголовок --- */
     .main-title {
       font-family: 'Marcellus SC', serif;
-      font-size: 2.2em;
-      font-weight: 700;
-      color: var(--violet);
-      margin-bottom: 0.3em;
-      line-height: 1.16;
-      text-shadow: 0 2px 16px #d0b3ff70;
-      letter-spacing: 0.02em;
+      color: #fff;
+      font-size: 2.3em;
+      font-weight: bold;
+      line-height: 1.13;
+      letter-spacing: .01em;
+      margin: 0 0 20px 0;
+      text-shadow: 0 4px 24px #5b50bb80;
+      background: linear-gradient(90deg, #6e74e9 80%, #25e6bc 120%);
+      border-radius: 28px 28px 0 0;
+      padding: 24px 0 10px 0;
+      position: absolute;
+      top: -56px;
+      left: 0;
+      right: 0;
+      z-index: 3;
     }
     .subtitle {
-      font-family: 'Marcellus SC', serif;
-      font-size: 1.08em;
-      font-style: italic;
-      color: var(--turquoise);
-      margin-bottom: 20px;
-      margin-top: 0;
-      font-weight: 500;
-      letter-spacing: 0.01em;
-    }
-    .desc {
-      color: #191523;
-      font-size: 1.03em;
       font-family: 'Roboto Slab', serif;
+      color: #4dd0e1;
+      margin-top: 72px;
+      font-size: 1.09em;
       margin-bottom: 20px;
-      line-height: 1.5;
-      font-weight: 400;
-      letter-spacing: 0.01em;
     }
-    .magic-line {
-      color: #b69226;
-      font-size: 1em;
-      margin: 14px 0 18px 0;
+    /* --- Кнопка Telegram --- */
+    .magic-btn {
+      display: block;
+      width: 100%;
+      max-width: 330px;
+      margin: 0 auto 18px auto;
+      background: linear-gradient(90deg, var(--gold) 70%, var(--gold-dark) 100%);
+      color: #624406;
       font-family: 'Marcellus SC', serif;
-      letter-spacing: 0.01em;
-      opacity: 0.97;
-      animation: magicFade 2.5s infinite alternate;
+      font-size: 1.17em;
+      font-weight: 700;
+      border: none;
+      border-radius: 18px;
+      padding: 18px 8px 14px 8px;
+      box-shadow: 0 2px 14px #c6ae4f4f, 0 1px 0 #fff;
+      cursor: pointer;
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: transform .11s, box-shadow .16s, background .21s;
+      outline: none;
+      animation: btnPop .7s cubic-bezier(.45,1.5,.66,1.13);
     }
+    .magic-btn:hover, .magic-btn:focus {
+      background: linear-gradient(90deg, #ffd95b 80%, #ffe082 100%);
+      transform: scale(1.025);
+      box-shadow: 0 6px 22px #ffe0827a;
+    }
+    @keyframes btnPop {
+      0% { transform: scale(0.92);}
+      80% { transform: scale(1.04);}
+      100% { transform: scale(1);}
+    }
+    /* --- "Как это работает" --- */
+    .how-card {
+      background: #fff;
+      border-radius: 22px;
+      box-shadow: 0 2px 14px #ede2ff88;
+      padding: 22px 17px 16px 17px;
+      margin: 24px 0 0 0;
+      display: flex;
+      flex-direction: row;
+      gap: 16px;
+      align-items: center;
+      justify-content: space-between;
+      min-height: 140px;
+    }
+    .how-steps {
+      text-align: left;
+      font-family: 'Roboto Slab', serif;
+      font-size: 1em;
+      flex: 1 1 68%;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      color: #3e3081;
+      font-weight: 500;
+    }
+    .how-steps .step {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1em;
+    }
+    .how-steps .step img {
+      width: 30px;
+      height: 30px;
+      flex-shrink: 0;
+      background: #f5f7fd;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px #e0daf68a;
+      padding: 2px;
+      margin-right: 6px;
+    }
+    .how-wizard {
+      flex: 1 1 32%;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      min-width: 96px;
+    }
+    .how-wizard img {
+      width: 94px;
+      margin-bottom: 0;
+      filter: drop-shadow(0 8px 12px #e4dfff4c);
+      border-radius: 16px;
+      background: #f9f6ff;
+    }
+    /* --- Прочие блоки --- */
     .magic-note {
-      color: #b69226;
+      color: #8a751d;
       background: #fffbe8;
-      padding: 7px 0 5px 0;
-      border-radius: 12px;
-      margin: 7px 0 0 0;
-      font-size: 0.97em;
+      padding: 8px 0 6px 0;
+      border-radius: 13px;
+      margin: 18px 0 0 0;
+      font-size: 0.98em;
       font-weight: 600;
       text-align: center;
       display: block;
       letter-spacing: 0.01em;
-      box-shadow: 0 0 10px #ffe08255;
-      transition: background 0.3s;
+      box-shadow: 0 0 10px #ffe0823a;
       font-family: 'Roboto Slab', serif;
-    }
-    @keyframes magicFade {
-      from { text-shadow: 0 0 2px #f9de91, 0 0 6px #fff176; }
-      to   { text-shadow: 0 0 10px #fff9c4, 0 0 24px #ffd740;}
-    }
-    .features {
-      display: flex;
-      gap: 10px;
-      justify-content: center;
-      margin: 20px 0 16px 0;
-      flex-wrap: wrap;
-    }
-    .feat-card {
-      background: var(--violet);
-      color: var(--white);
-      border-radius: 16px;
-      padding: 13px 16px;
-      font-size: 1em;
-      font-weight: 500;
-      margin: 3px 0;
-      box-shadow: 0 2px 10px #c2a6e99a;
-      min-width: 110px;
-      transition: background 0.2s, transform 0.12s;
-      cursor: default;
-      user-select: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      font-family: 'Roboto Slab', serif;
-      animation: fadeInUp 1.4s cubic-bezier(.8,-0.1,.2,1.2);
-    }
-    .magic-btn {
-      display: inline-block;
-      background: linear-gradient(90deg, #25e6bc 10%, #6e74e9 100%);
-      color: #fff;
-      font-size: 1.18em;
-      font-weight: 700;
-      font-family: 'Marcellus SC', serif;
-      padding: 14px 20px 12px 20px;
-      border: none;
-      border-radius: 18px;
-      box-shadow: 0 2px 14px #79e2c861, 0 0px 0 #fff;
-      cursor: pointer;
-      margin: 24px 0 8px 0;
-      text-decoration: none;
-      letter-spacing: 0.03em;
-      transition: transform 0.13s, box-shadow 0.16s;
-      position: relative;
-      overflow: hidden;
-      animation: pulseBtn 2.2s infinite alternate;
-    }
-    .magic-btn:active, .magic-btn:focus {
-      transform: scale(0.97);
-      box-shadow: 0 0px 6px #79e2c888;
-      outline: none;
-    }
-    @keyframes pulseBtn {
-      from { box-shadow: 0 2px 18px #c8fbe9cc; }
-      to   { box-shadow: 0 4px 30px #e1e4ff77;}
     }
     .policy-link {
-      color: #97730f;
-      text-decoration: underline;
-      font-size: 0.98em;
-      font-weight: 500;
-    }
-    .policy-link:hover {
       color: #b69226;
       text-decoration: underline;
     }
+    .policy-link:hover { color: #f3bc42; }
     .footer {
-      color: #66646e;
-      font-size: 0.93em;
-      margin-top: 12px;
+      color: #6a6a7b;
+      font-size: 0.97em;
+      margin-top: 14px;
       text-align: center;
       font-family: 'Roboto Slab', serif;
       word-break: break-all;
     }
     .contact-link {
-      color: #228ca3;
+      color: #4dd0e1;
       text-decoration: underline;
     }
-    .contact-link:hover {
-      color: #1e1733;
-    }
-    .star {
-      position: absolute;
-      font-size: 1.6em;
-      opacity: 0.14;
-      animation: stars 3.2s linear infinite;
-      pointer-events: none;
-    }
-    .star-1 { left: 22%; top: 18%; animation-delay: 0s;}
-    .star-2 { right: 19%; top: 13%; font-size:2.1em; animation-delay: .7s;}
-    .star-3 { left: 16%; bottom: 14%; font-size:1.3em; animation-delay: 1.1s;}
-    .star-4 { right: 15%; bottom: 21%; font-size:1.8em; animation-delay: 1.6s;}
-    .star-5 { left: 48%; top: 24%; font-size:1.1em; animation-delay: 2.4s;}
-    @keyframes stars {
-      0%   { opacity: 0.13; transform: scale(0.9) rotate(0deg);}
-      47%  { opacity: 0.23;}
-      60%  { opacity: 0.35; transform: scale(1.3) rotate(19deg);}
-      100% { opacity: 0.11; transform: scale(0.7) rotate(-30deg);}
-    }
+    .contact-link:hover { color: #6e74e9; }
     @media (max-width: 600px) {
-      .container { padding: 19px 4vw 20px 4vw; }
-      .main-title { font-size: 1.28em;}
-      .features { flex-direction: column; gap: 0;}
-      .feat-card { min-width: 90px; font-size:0.97em;}
-      .magic-btn { font-size: 1em; padding: 13px 0; width: 97%; }
+      .container { padding: 13px 3vw 20px 3vw; max-width: 99vw;}
+      .main-title { font-size: 1.15em; padding: 16px 0 6px 0; top: -35px;}
+      .subtitle { margin-top: 44px; }
+      .how-card { flex-direction: column; gap:10px;}
+      .how-wizard img { width: 68px;}
+      .magic-btn { font-size: 1em; padding: 14px 0; max-width: 100%; }
     }
   </style>
 </head>
 <body>
-  <!-- Магические анимированные звёздочки -->
+  <!-- ✨ Летающие волшебные иконки (PNG из public/) -->
   <div class="magic-bg">
-    <span class="star star-1">✨</span>
-    <span class="star star-2">🟣</span>
-    <span class="star star-3">🔮</span>
-    <span class="star star-4">⭐</span>
-    <span class="star star-5">🪄</span>
+    <img src="/bottle.png"      class="icon-bottle" alt="">
+    <img src="/magic.png"       class="icon-magic" alt="">
+    <img src="/magic-ball.png"  class="icon-magic-ball" alt="">
+    <img src="/magic-wand.png"  class="icon-magic-wand" alt="">
+    <img src="/pot.png"         class="icon-pot" alt="">
+    <img src="/witch-hat.png"   class="icon-witch-hat" alt="">
   </div>
+  <!-- 💜 Основной контейнер -->
   <div class="container">
+
+    <!-- 💜 Заголовок -->
     <div class="main-title">
-      Магический бот-помощник<br>“Фокусник Альтаир 🧙🏼‍♂️”
+      Твоя волшебная лента VK —<br>прямо в Telegram
     </div>
+
+    <!-- ✨ Подзаголовок -->
     <div class="subtitle">
-      <span style="font-style:italic;">Помогает сосредоточиться на важном и не залипнуть в ленте</span>
+      Мир, где нужные посты находят тебя сами.
     </div>
-    <div class="desc">
-      Этот бот умеет в одно касание показывать новости из ваших любимых VK-групп прямо в Telegram.<br>
-      Без лишних хлопот — только самые важные обновления, с магическим удобством и заботой о вашей приватности ✨
-    </div>
-    <div class="magic-line">
-      Пусть цифровая лента работает на тебя, а не наоборот<br>
-      Просто запусти волшебство и наслаждайся результатом 🪄
-    </div>
-    <div class="features">
-      <div class="feat-card">Всегда свежая лента VK 🟣</div>
-      <div class="feat-card">Безопасная интеграция с Telegram 🔒</div>
-      <div class="feat-card">Просто быстро магически ⭐</div>
-    </div>
-    <!-- Оставляем только Telegram-кнопку! -->
+
+    <!-- 🌟 Кнопка Telegram -->
     <a class="magic-btn" href="https://t.me/mytestvk_bot" target="_blank" rel="noopener">
-      Перейти в Telegram и начать магию 🔮
+      Войти в Telegram
     </a>
+
+    <!-- 📜 Блок "Как это работает" -->
+    <div class="how-card">
+      <div class="how-steps">
+        <div class="step">
+          <img src="/magic.png" alt="Войти через VK">
+          Войти через VK
+        </div>
+        <div class="step">
+          <img src="/magic-ball.png" alt="Выбрать группы">
+          Выбрать группы
+        </div>
+        <div class="step">
+          <img src="/pot.png" alt="Получать посты">
+          Получать посты
+        </div>
+      </div>
+      <div class="how-wizard">
+        <img src="/wizard.png" alt="Проводник Альтаир">
+      </div>
+    </div>
+
+    <!-- 👾 Магическая заметка + политика -->
     <div class="magic-note">
-      Бот использует безопасную авторизацию VK ID<br>
-      Все данные под охраной магической приватности<br>
+      Бот использует безопасную авторизацию VK ID.<br>
+      Все данные под охраной магической приватности.<br>
       <a href="https://api.fokusnikaltair.xyz/privacy.html" class="policy-link" target="_blank">Политика конфиденциальности</a>
     </div>
+
+    <!-- 📬 Связь -->
     <div class="footer">
       Связаться с магистром бота: <a class="contact-link" href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
     </div>

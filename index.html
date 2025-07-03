@@ -21,27 +21,27 @@
     }
     .main-content {
       width: 100%;
-      max-width: 680px;
-      margin: 60px auto 0 48px; /* Слева отступ для заголовка и кнопки */
+      max-width: 740px; /* ОБНОВЛЕНИЕ: шире */
+      margin: 54px auto 0 56px; /* ОБНОВЛЕНИЕ: левый отступ чуть больше */
       display: flex;
       flex-direction: column;
       align-items: flex-start;
       position: relative;
     }
-    /* --- Обновлено: крупный заголовок и подзаголовок --- */
+    /* --- Крупный заголовок и подзаголовок --- */
     .big-title {
-      font-size: 2.35em;
+      font-size: 2.5em;   /* ОБНОВЛЕНИЕ: больше! */
       font-weight: 700;
       color: #fff;
-      margin-bottom: 6px;
-      line-height: 1.17;
+      margin-bottom: 7px;
+      line-height: 1.15;
       text-shadow: 0 3px 18px #665ba5aa;
       letter-spacing: 0.01em;
     }
     .subtitle {
       color: #b5eaff;
       font-size: 1.15em;
-      margin-bottom: 22px;
+      margin-bottom: 26px;
       font-weight: 400;
       letter-spacing: 0.01em;
     }
@@ -55,37 +55,40 @@
       border: none;
       border-radius: 15px;
       box-shadow: 0 2px 18px #f9eab666;
-      margin-bottom: 36px;
+      margin-bottom: 38px;
       cursor: pointer;
       font-family: 'Montserrat', Arial, sans-serif;
       transition: background .17s, box-shadow .19s;
       margin-left: 0;
       margin-top: 0;
+      text-decoration: none;
+      display: inline-block;
     }
     .tg-btn:hover {
       background: #deb142;
     }
-    /* --- Обновлено: только белый контейнер для раздела "Как это работает" и волшебника --- */
+    /* --- Белый контейнер для "Как это работает" и волшебника --- */
     .work-container {
       background: #fff;
       border-radius: 26px;
       box-shadow: 0 6px 34px 0 #c2b6e274;
       padding: 42px 36px 38px 36px;
-      margin-top: 10px;
+      margin-top: 8px;
       display: flex;
       align-items: center;
-      gap: 32px;
+      gap: 38px;
       max-width: 690px;
       min-width: 390px;
       width: 100%;
-      min-height: 330px;
+      min-height: 336px;
+      box-sizing: border-box;
     }
-    /* --- "Как это работает" как крупный заголовок контейнера --- */
+    /* --- "Как это работает" крупный заголовок контейнера --- */
     .work-title {
-      font-size: 1.36em;
+      font-size: 1.42em;
       font-weight: 700;
-      color: #222;
-      margin-bottom: 20px;
+      color: #181818;
+      margin-bottom: 22px;
       font-family: 'Montserrat', Arial, sans-serif;
       letter-spacing: 0.01em;
     }
@@ -95,27 +98,27 @@
       align-items: flex-start;
       justify-content: flex-start;
       gap: 8px;
-      min-width: 215px;
+      min-width: 230px;
     }
     .step-row {
       display: flex;
       align-items: center;
-      gap: 11px;
+      gap: 13px;
       min-height: 56px;
     }
     .arrow-row {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
-      height: 26px;
-      margin-left: 26px;
-      margin-bottom: -3px;
+      justify-content: center;
+      height: 22px;
+      margin: 0;
+      width: 100%;
     }
     .arrow-img {
       width: 27px;
-      height: 25px;
+      height: 22px;
       object-fit: contain;
-      opacity: 0.75;
+      opacity: 0.82;
     }
     .step-img {
       width: 42px;
@@ -123,12 +126,12 @@
       object-fit: contain;
     }
     .step-text {
-      font-size: 1.08em;
+      font-size: 1.14em;
       color: #232323;
       font-weight: 500;
       font-family: 'Montserrat', Arial, sans-serif;
     }
-    /* --- Обновлено: увеличенный волшебник --- */
+    /* --- ОБНОВЛЕНИЕ: волшебник большой! --- */
     .wizard-side {
       display: flex;
       flex-direction: column;
@@ -136,18 +139,19 @@
       justify-content: flex-end;
       height: 100%;
       margin-left: 14px;
+      min-width: 180px;
     }
     .wizard-img {
-      width: 280px; /* Сделай больше если хочется! */
-      max-width: 300px;
+      width: 325px; /* ОБНОВЛЕНИЕ: БОЛЬШЕ */
+      max-width: 360px;
       height: auto;
       display: block;
       margin-bottom: 0;
     }
     /* --- Приватность и связь --- */
     .privacy-footer {
-      margin-top: 28px;
-      font-size: 0.98em;
+      margin-top: 29px;
+      font-size: 1em;
       color: #27768a;
       font-family: 'Montserrat', Arial, sans-serif;
     }
@@ -160,19 +164,46 @@
       color: #15546e;
     }
     .contact-link {
-      color: #2587a7;
+      color: #176181; /* ОБНОВЛЕНИЕ: темнее! */
       text-decoration: underline;
       margin-left: 8px;
     }
     .contact-link:hover {
-      color: #12384c;
+      color: #0e3752;
     }
+
+    /* --- Адаптив: Мобильная версия --- */
     @media (max-width: 650px) {
-      .main-content { margin-left: 1vw; max-width: 98vw;}
-      .work-container { flex-direction: column; align-items: flex-start; gap: 20px; padding: 18px 5vw 24px 5vw;}
-      .wizard-side { align-items: flex-end; margin-left: 0; }
-      .wizard-img { width: 120px; max-width: 44vw;}
-      .big-title { font-size: 1.19em;}
+      .main-content { margin-left: 1vw; max-width: 99vw;}
+      .work-container {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 20px;
+        padding: 18px 3vw 24px 3vw;
+        min-width: 0;
+        width: 99vw;
+        box-sizing: border-box;
+      }
+      .wizard-side {
+        margin-left: 0;
+        margin-top: 14px;
+        align-items: center;
+        justify-content: flex-start;
+        width: 100%;
+        min-width: 0;
+      }
+      .wizard-img {
+        width: 92vw; /* почти на всю ширину экрана! */
+        max-width: 99vw;  /* чуть-чуть отступы по краям */
+        margin: 12px auto 0 auto;
+        display: block;
+      }
+      .arrow-row {
+        margin: 0;
+        width: 100%;
+        justify-content: center;
+      }
+      .big-title { font-size: 1.13em;}
     }
   </style>
 </head>
@@ -219,4 +250,3 @@
   </div>
 </body>
 </html>
-

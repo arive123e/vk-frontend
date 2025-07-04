@@ -165,9 +165,10 @@
       .wizard-box {
         justify-content: flex-end;
         margin-top: 7vw;
+        min-height: 42vw;       /* ↑ Увеличено: дало место тени */
+        overflow: visible;      /* ← вот эта строка! */
       }
       .wizard-img { width: 49vw; }
-      /* ========== /ИЗМЕНЕНИЯ ========== */
       .footer-links { font-size: 0.95em; }
     }
   </style>

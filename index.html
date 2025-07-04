@@ -227,20 +227,22 @@
       .wizard-side {
         display: flex;
         flex-direction: column;
-        justify-content: center;
+        justify-content: flex-end;
         align-items: flex-end;
         width: 45vw;
         max-width: 200px;
         margin-right: 0;
         margin-left: -4vw;
-        height: 220px;
+        height: 320px;
       }
       .wizard-img {
-       width: 47vw;
-       max-width: 193px;
-       min-width: 93px;
-       margin: 0 0 38px 3mm; /* сверху 0, справа 0, снизу 24px (ОПУСКАЕМ вниз), слева 3мм (ПРИЖИМАЕМ к левому краю контейнера) */
-       display: block;
+        width: 47vw;
+        max-width: 193px;
+        min-width: 93px;
+        margin-left: 3mm;  /* только смещение влево */
+        margin-bottom: 0;  /* остальные маргины убираем */
+        margin-top: 0;
+        display: block;
       }
       .work-steps {
         width: 56vw;

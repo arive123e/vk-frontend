@@ -172,9 +172,16 @@
       color: #0e3752;
     }
 
-    /* --- Адаптив: Мобильная версия --- */
+    /* --- Адаптив: Мобильная версия --- */ 
    @media (max-width: 650px) {
-  .work-container {
+      .main-content {
+    margin: 24px auto 0 auto;    
+    padding: 0 2vw;              
+    max-width: 100vw;            
+    width: 100%;
+    box-sizing: border-box;      
+  }
+     .work-container {
     flex-direction: row;
     align-items: stretch;
     justify-content: space-between;

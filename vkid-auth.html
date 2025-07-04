@@ -6,17 +6,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;400&display=swap" rel="stylesheet">
   <style>
-    body {
+    /* ОБЯЗАТЕЛЬНО! Убирает горизонтальный скролл и лишние полосы на всех устройствах */
+    html, body {
+      width: 100vw;
+      min-width: 100vw;
+      max-width: 100vw;
       min-height: 100vh;
       margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      overflow-x: hidden;
       font-family: 'Montserrat', Arial, sans-serif;
+    }
+
+    body {
       background: linear-gradient(135deg, #764ba2 0%, #667eea 55%, #1de9b6 100%);
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: flex-start;
       position: relative;
-      overflow-x: hidden;
     }
     /* Звезды */
     .stars-bg { position: fixed; z-index: 0; width: 100vw; height: 100vh; left: 0; top: 0; pointer-events: none; }
@@ -126,11 +135,9 @@
       position: relative;
     }
 
-    /* Вот ключ: обертка и фильтр у нее! */
     .wizard-img-wrap {
       display: inline-block;
       filter: drop-shadow(0 0 48px #fff) drop-shadow(0 14px 48px #a68e79cc);
-      /* Можно усилить радиус, если нужно — 48px или больше */
     }
 
     .wizard-img {
@@ -140,7 +147,6 @@
       display: block;
       user-select: none;
       /* filter убираем отсюда! */
-      /* Никаких рамок или box-shadow тут нет */
     }
 
     .footer-links {
@@ -158,6 +164,14 @@
       margin-right: 6px;
     }
     @media (max-width: 600px) {
+      html, body {
+        width: 100vw;
+        min-width: 100vw;
+        max-width: 100vw;
+        margin: 0;
+        padding: 0;
+        overflow-x: hidden;
+      }
       .page-content {
         max-width: 99vw;
         padding: 5vw 3vw 4vw 3vw;
@@ -173,7 +187,6 @@
         overflow: visible;
       }
       .wizard-img-wrap {
-        /* Тот же фильтр: и белое свечение, и серая тень */
         filter: drop-shadow(0 0 48px #fff) drop-shadow(0 14px 48px #a68e79cc);
       }
       .wizard-img {
@@ -224,13 +237,11 @@
       Бот не получает доступ к вашему паролю.<br>
       Ваши данные в безопасности
     </div>
-    <!-- ========== ИЗМЕНЕНО: обёртка для волшебника ========== -->
     <div class="wizard-box">
       <div class="wizard-img-wrap">
         <img class="wizard-img" src="/wizard 2.png" alt="Волшебник Альтаир">
       </div>
     </div>
-    <!-- ========== /ИЗМЕНЕНО ========== -->
     <div class="footer-links">
       <a href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a><br>
       Связь с магистром: <a href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>
@@ -285,3 +296,4 @@
   </script>
 </body>
 </html>
+

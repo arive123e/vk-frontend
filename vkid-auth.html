@@ -154,22 +154,28 @@
       margin-right: 6px;
     }
     @media (max-width: 600px) {
-      .page-content {
-        max-width: 99vw;
-        padding: 5vw 3vw 4vw 3vw;
-        margin: 18px 0 5vw 0;
-        min-height: unset;
-      }
-      .big-title { font-size: 1.22em; }
-      /* ========== ИЗМЕНЕНИЯ: мобильный волшебник также справа, сохраняем стиль ========== */
-      .wizard-box {
-        justify-content: flex-end;
-        margin-top: 7vw;
-        min-height: 42vw;       /* ↑ Увеличено: дало место тени */
-        overflow: visible;      /* ← вот эта строка! */
-      }
-      .wizard-img { width: 49vw; }
-      .footer-links { font-size: 0.95em; }
+  .page-content {
+    max-width: 99vw;
+    padding: 5vw 3vw 4vw 3vw;
+    margin: 18px 0 5vw 0;
+    min-height: unset;
+    overflow: visible;           /* ← ДАЁМ фильтру выйти за края */
+  }
+  .big-title { font-size: 1.22em; }
+  .wizard-box {
+    justify-content: flex-end;
+    margin-top: 7vw;
+    min-height: 50vw;            /* ↑ место для тени! */
+    overflow: visible;           /* ← ещё раз тут */
+  }
+  .wizard-img {
+    width: 49vw;
+    max-width: 60vw;             /* ← чуть больше свободы */
+    display: block;
+    filter: drop-shadow(0 0 45px #fff9) drop-shadow(0 11px 35px #85624a);
+    /* ↑ можно усилить свечение, если хочется — как на ПК */
+  }
+  .footer-links { font-size: 0.95em; }
     }
   </style>
 </head>

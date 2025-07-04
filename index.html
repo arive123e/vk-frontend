@@ -100,25 +100,51 @@
       gap: 8px;
       min-width: 230px;
     }
-    .step-row {
-      display: flex;
+    .steps-grid {
+      display: grid;
+      grid-template-columns: auto 38px auto 38px auto;
+      grid-template-rows: auto 36px auto;
       align-items: center;
-      gap: 13px;
-      min-height: 56px;
+      justify-items: center;
+      margin-top: 8px;
+      margin-bottom: 4px;
+      position: relative;
+      min-width: 260px;
     }
-    .arrow-row {
+    /* Верхний ряд */
+    .step-item {
       display: flex;
+      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      height: 22px;
-      margin: 0;
-      width: 100%;
+      text-align: center;
     }
-    .arrow-img {
-      width: 27px;
-      height: 22px;
-      object-fit: contain;
-      opacity: 0.82;
+    /* Первый шаг */
+    .step-1 {
+      grid-column: 1 / 2;
+      grid-row: 1 / 2;
+    }
+    /* Стрелка 1 */
+    .arrow-1 {
+      grid-column: 2 / 3;
+      grid-row: 1 / 2;
+    }
+    /* Второй шаг */
+    .step-2 {
+      grid-column: 3 / 4;
+      grid-row: 1 / 2;
+    }
+    /* Стрелка 2 (смотрит вниз) */
+    .arrow-2 {
+      grid-column: 4 / 5;
+      grid-row: 1 / 2;
+      transform: rotate(90deg);
+      align-self: end;
+      justify-self: center;
+    }
+    /* Нижний шаг — по центру под вторым шагом */
+    .step-3 {
+      grid-column: 3 / 4;
+      grid-row: 3 / 4;
     }
     .step-img {
       width: 42px;
@@ -234,27 +260,36 @@
     <a href="https://t.me/mytestvk_bot" class="tg-btn" target="_blank">Войти в Telegram</a>
     <!-- Только контейнер "Как это работает" и волшебник -->
     <div class="work-container">
-      <div class="work-steps">
-        <div class="work-title">Как это работает</div>
-        <div class="step-row">
-          <img class="step-img" src="/magic.png" alt="Войти через VK">
-          <span class="step-text">Войти через VK</span>
-        </div>
-        <div class="arrow-row">
-          <img class="arrow-img" src="/arrow-down.png" alt="Дальше">
-        </div>
-        <div class="step-row">
-          <img class="step-img" src="/magic-ball.png" alt="Выбрать группы">
-          <span class="step-text">Выбрать группы</span>
-        </div>
-        <div class="arrow-row">
-          <img class="arrow-img" src="/arrow-down.png" alt="Дальше">
-        </div>
-        <div class="step-row">
-          <img class="step-img" src="/witch-hat.png" alt="Получать посты">
-          <span class="step-text">Получать посты</span>
+  <div class="work-steps">
+    <div class="work-title">Как это работает</div>
+    <div class="steps-grid">
+      <!-- Верхний ряд -->
+      <div class="step-item">
+        <img class="step-img" src="/portal.png" alt="Войти">
+        <div class="step-text">
+          <div>Войти</div>
+          <div>через VK</div>
         </div>
       </div>
+      <img class="arrow-img horizontal" src="/arrow-right.png" alt="→">
+      <div class="step-item">
+        <img class="step-img" src="/book.png" alt="Выбрать группы">
+        <div class="step-text">
+          <div>Выбрать</div>
+          <div>группы</div>
+        </div>
+      </div>
+      <img class="arrow-img horizontal arrow-to-down" src="/arrow-right.png" alt="→">
+      <!-- Нижний ряд -->
+      <div class="step-item step-item-down">
+        <img class="step-img" src="/letter.png" alt="Получать посты">
+        <div class="step-text">
+          <div>Получать</div>
+          <div>посты</div>
+        </div>
+      </div>
+    </div>
+  </div>
       <!-- Волшебник -->
       <div class="wizard-side">
         <img class="wizard-img" src="/wizard.png" alt="Проводник Альтаир">

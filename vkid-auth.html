@@ -10,30 +10,17 @@
       min-height: 100vh;
       margin: 0;
       font-family: 'Montserrat', Arial, sans-serif;
-      /* БОЛЬШЕ ЗЕЛЁНОГО */
       background: linear-gradient(135deg, #764ba2 0%, #667eea 55%, #1de9b6 100%);
       display: flex;
-      justify-content: center;
-      align-items: flex-start;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
       position: relative;
       overflow-x: hidden;
     }
-    /* === Звезды === */
-    .stars-bg {
-      position: fixed;
-      z-index: 0;
-      width: 100vw;
-      height: 100vh;
-      left: 0; top: 0;
-      pointer-events: none;
-      overflow: hidden;
-    }
-    .star {
-      position: absolute;
-      opacity: 0.13;
-      filter: blur(0.2px);
-    }
-    /* 20 звезд с разными стилями */
+    /* Звезды */
+    .stars-bg { position: fixed; z-index: 0; width: 100vw; height: 100vh; left: 0; top: 0; pointer-events: none; }
+    .star { position: absolute; opacity: 0.13; filter: blur(0.2px);}
     .star1 { width:34px; top:11%; left:7%; opacity:.15;}
     .star2 { width:21px; top:18%; left:21%; opacity:.10;}
     .star3 { width:29px; top:28%; left:81%; opacity:.13;}
@@ -54,116 +41,120 @@
     .star18 { width:24px; top:23%; left:51%; opacity:.12;}
     .star19 { width:22px; top:92%; left:77%; opacity:.10;}
     .star20 { width:31px; top:59%; left:80%; opacity:.13;}
-    /* === /звезды === */
 
-    .main-content {
+    .page-content {
       position: relative;
       z-index: 2;
       width: 100%;
       max-width: 420px;
-      background: rgba(255,255,255,0.94);
-      border-radius: 28px;
-      margin: 62px 0 36px 0;
-      padding: 36px 34px 36px 34px;
-      box-shadow: 0 8px 32px 0 #331b509c;
+      margin: 64px 0 0 0;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 450px;
+      min-height: 80vh;
     }
     .big-title {
-      color: #522a8f;
+      color: #fff;
       font-size: 2.1em;
       font-weight: 700;
-      margin-bottom: 16px;
+      margin-bottom: 17px;
+      margin-top: 18px;
       line-height: 1.15;
       text-align: center;
+      text-shadow: 0 2px 24px #522a8f33;
     }
     .subtitle {
-      color: #573d87;
-      font-size: 1.19em;
-      margin-bottom: 26px;
+      color: #fff;
+      font-size: 1.15em;
+      margin-bottom: 29px;
       font-weight: 400;
       text-align: center;
+      text-shadow: 0 1px 16px #331b5099;
     }
     .vk-btn {
+      background: #fff;
+      color: #0077FF;
+      border: 2px solid #0077FF;
       display: inline-flex;
       align-items: center;
-      justify-content: center;
-      background: #0077FF;
-      color: #fff;
+      border-radius: 24px;
+      height: 52px;
+      min-width: 240px;
+      padding: 0 28px;
+      font-size: 1.16em;
       font-family: 'Montserrat', Arial, sans-serif;
       font-weight: 500;
-      font-size: 1.1em;
-      border: none;
-      border-radius: 22px;
-      height: 54px;
-      min-width: 240px;
-      padding: 0 26px;
       cursor: pointer;
       margin-top: 15px;
-      margin-bottom: 22px;
-      box-shadow: 0 2px 20px #2c6ae388;
-      transition: background 0.14s, box-shadow 0.18s;
-      font-size: 1.23em;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 12px #0077FF19;
       text-decoration: none;
       user-select: none;
       letter-spacing: 0.01em;
+      transition: background 0.14s, color 0.13s, border 0.12s;
     }
-    .vk-btn:hover { background: #0857ad; }
-    .vk-btn svg, .vk-btn img {
+    .vk-btn:hover {
+      background: #f6fbff;
+      color: #0054b0;
+      border-color: #0054b0;
+    }
+    .vk-btn img {
       margin-right: 11px;
-      width: 32px; height: 32px; min-width: 32px;
-      background: #fff; border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      border-radius: 50%;
+      background: #0077FF;
       display: inline-block;
     }
     .safe-info {
-      color: #522a8f;
-      margin: 0 auto 18px auto;
+      color: #fff;
+      margin: 0 auto 16px auto;
       text-align: center;
-      font-size: 1.01em;
-      opacity: 0.85;
+      font-size: 1.07em;
+      opacity: 0.9;
+      text-shadow: 0 1px 12px #331b507a;
     }
     .wizard-box {
       width: 100%;
       display: flex;
       justify-content: center;
       align-items: flex-end;
-      min-height: 160px;
-      margin-bottom: 16px;
+      min-height: 150px;
+      margin: 10px auto 16px auto;
       position: relative;
     }
     .wizard-img {
-      width: 170px;
-      max-width: 55vw;
+      width: 185px;
+      max-width: 54vw;
       margin: 0 auto 0 0;
       display: block;
       user-select: none;
+      filter: drop-shadow(0 2px 18px #7655cc3d);
     }
     .footer-links {
-      color: #6e659d;
+      color: #fff;
       text-align: center;
       font-size: 1em;
       margin: 12px auto 0 auto;
-      opacity: 0.92;
+      opacity: 0.96;
+      text-shadow: 0 2px 10px #502b9562;
     }
     .footer-links a {
-      color: #3a75e6;
+      color: #d6f7ff;
       text-decoration: underline;
       margin-left: 6px;
       margin-right: 6px;
     }
-    /* Мобильная версия */
     @media (max-width: 600px) {
-      .main-content {
+      .page-content {
         max-width: 99vw;
-        padding: 17vw 4vw 8vw 4vw;
-        margin: 20px 0 14vw 0;
+        padding: 5vw 3vw 4vw 3vw;
+        margin: 18px 0 5vw 0;
         min-height: unset;
       }
-      .big-title { font-size: 1.21em; }
-      .subtitle { font-size: 0.99em; }
-      .wizard-img { width: 45vw; }
+      .big-title { font-size: 1.22em; }
+      .wizard-img { width: 49vw; }
       .footer-links { font-size: 0.95em; }
     }
   </style>
@@ -194,17 +185,13 @@
   </div>
   <!-- ======= /ФОН ЗВЕЗДЫ ======= -->
 
-  <div class="main-content">
+  <div class="page-content">
     <div class="big-title">Портал активации открыт!</div>
     <div class="subtitle">
       Войди через VK, чтобы волшебство продолжалось в Telegram.
     </div>
     <button class="vk-btn" id="vk-auth-btn">
-      <!-- SVG логотип VK (замени при желании на <img src="/vk_logo.png" ...>) -->
-      <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 28 28">
-        <rect width="28" height="28" rx="14" fill="#fff"/>
-        <path d="M14 0C6.27 0 0 6.27 0 14s6.27 14 14 14 14-6.27 14-14S21.73 0 14 0zm5.32 10.24c.12-.41 0-.67-.58-.67h-1.93c-.48 0-.7.24-.81.52 0 0-1 2.41-2.4 3.97-.46.46-.67.6-.93.6-.13 0-.31-.13-.31-.52v-3.81c0-.45-.13-.67-.52-.67h-2.98c-.29 0-.48.21-.48.43 0 .41.61.5.67 1.67v2.49c0 .55-.1.65-.3.65-.59 0-2.02-2.4-2.87-5.13-.15-.44-.32-.57-.74-.57H4.56c-.41 0-.41.19-.41.46 0 .46.7 2.88 3.37 6.06 1.41 1.69 2.89 1.63 2.89 1.63h1.18c.41 0 .56-.19.61-.42 0 0 .16-.39.23-.53.07-.15.21-.18.31-.18.09 0 .22.03.33.13.1.09.13.21.13.33v1.09c0 .32.08.45.47.45h1.99c.27 0 .45-.12.49-.39.04-.24-.07-.38-.28-.46-.39-.13-1.18-.42-1.68-1.11-.14-.18-.22-.38-.18-.6.06-.32.29-.53.62-.53h1.68c.47 0 .83-.11 1.13-.32.3-.21.54-.55.73-1 .19-.45.29-.94.29-1.48v-1.06c0-.46-.17-.68-.5-.68-.28 0-.46.19-.54.41z" fill="#0077FF"/>
-      </svg>
+      <img src="/VK Logo.png" alt="VK" width="32" height="32">
       Войти через VK ID
     </button>
     <div class="safe-info">
@@ -221,7 +208,7 @@
   </div>
 
   <script>
-    // Всё как было!
+    // Авторизация (как у тебя)
     function getTgId() {
       const params = new URLSearchParams(window.location.search);
       return params.get('tg_id');
@@ -252,7 +239,7 @@
         alert('Ошибка: не передан Telegram ID (tg_id)');
         return;
       }
-      const client_id = '53336238'; // твой VK APP ID
+      const client_id = '53336238';
       const redirect_uri = encodeURIComponent('https://api.fokusnikaltair.xyz/vk-callback.html');
       const scope = 'groups';
       const response_type = 'code';

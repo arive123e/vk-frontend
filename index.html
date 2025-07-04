@@ -201,50 +201,6 @@
     .contact-link:hover {
       color: #fff;
     }
-
-    /* ===== АНИМИРОВАННЫЕ ИКОНКИ ВНЕ КОНТЕЙНЕРА ===== */
-    .magic-float {
-      position: fixed;
-      z-index: 10;
-      pointer-events: none;
-      opacity: 0.92;
-      animation-timing-function: ease-in-out;
-    }
-    .magic-float-1 { /* Слева-вверху */
-      top: 24px; left: 18px;
-      width: 54px;
-      animation: floatY 3.3s infinite;
-    }
-    .magic-float-2 { /* Справа-вверху */
-      top: 32px; right: 20px;
-      width: 48px;
-      animation: floatX 2.7s infinite;
-    }
-    .magic-float-3 { /* Слева-внизу */
-      bottom: 32px; left: 30px;
-      width: 62px;
-      animation: floatSpin 7s linear infinite;
-    }
-    .magic-float-4 { /* Справа-внизу */
-      bottom: 36px; right: 18px;
-      width: 49px;
-      animation: floatY 2.9s infinite;
-      animation-delay: 1.2s;
-    }
-    @keyframes floatY {
-      0%,100% { transform: translateY(0);}
-      50% { transform: translateY(-20px);}
-    }
-    @keyframes floatX {
-      0%,100% { transform: translateX(0);}
-      50% { transform: translateX(24px);}
-    }
-    @keyframes floatSpin {
-      0% { transform: rotate(0);}
-      100% { transform: rotate(360deg);}
-    }
-    /* ===== КОНЕЦ КОДА ДЛЯ АНИМИРОВАННЫХ ИКОНКИ ===== */
-
     /* --- Адаптив: Мобильная версия --- */ 
     @media (max-width: 650px) {
       .main-content {
@@ -283,8 +239,8 @@
         width: 47vw;
         max-width: 193px;
         min-width: 93px;
-        margin-left: 3mm;
-        margin-bottom: 0;
+        margin-left: 3mm;  /* только смещение влево */
+        margin-bottom: 0;  /* остальные маргины убираем */
         margin-top: 0;
         display: block;
       }
@@ -307,32 +263,17 @@
         height: 38px !important;
       }
       .step-text {
-        font-size: 0.98em;
-      }
-      .work-title {
-        font-size: 1.52em;
-        margin-top: 8px;
-        margin-left: 3mm;
-      }
+    font-size: 0.98em;  /* уменьшили размер только на мобильном */
+     }
+       .work-title {
+    font-size: 1.52em;      /* было 1.14-1.16em, теперь чуть крупнее */
+    margin-top: 8px;        /* отступ сверху — чуть ниже */
+    margin-left: 3mm;       /* отступ слева — чуть правее */
+  }
     }
   </style>
 </head>
 <body>
-  <!-- ===== БЛОКИ ДЛЯ АНИМИРОВАННЫХ ИКОНКИ ===== -->
-  <div class="magic-float magic-float-1">
-    <img src="/bottle.png" alt="Bottle" style="width:100%;">
-  </div>
-  <div class="magic-float magic-float-2">
-    <img src="/magic.png" alt="Magic" style="width:100%;">
-  </div>
-  <div class="magic-float magic-float-3">
-    <img src="/magic-ball.png" alt="Magic Ball" style="width:100%;">
-  </div>
-  <div class="magic-float magic-float-4">
-    <img src="/witch-hat.png" alt="Witch Hat" style="width:100%;">
-  </div>
-  <!-- ===== КОНЕЦ БЛОКОВ ДЛЯ АНИМИРОВАННЫХ ИКОНКИ ===== -->
-
   <div class="main-content">
     <!-- Заголовок и подзаголовок слева -->
     <div class="big-title">Твоя волшебная лента VK -<br>прямо в <b style="color:#5ce6e6;">Telegram</b></div>
@@ -386,4 +327,4 @@
     </div>
   </div>
 </body>
-</html>
+</html> 

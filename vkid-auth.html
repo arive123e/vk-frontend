@@ -116,7 +116,6 @@
       text-shadow: 0 1px 12px #331b507a;
     }
 
-    /* ========== ИЗМЕНЕНИЯ: волшебник справа, яркое белое свечение, коричнево-серая тень ========== */
     .wizard-box {
       width: 100%;
       display: flex;
@@ -126,17 +125,23 @@
       margin: 10px auto 16px auto;
       position: relative;
     }
+
+    /* Вот ключ: обертка и фильтр у нее! */
+    .wizard-img-wrap {
+      display: inline-block;
+      filter: drop-shadow(0 0 48px #fff) drop-shadow(0 14px 48px #a68e79cc);
+      /* Можно усилить радиус, если нужно — 48px или больше */
+    }
+
     .wizard-img {
       width: 185px;
       max-width: 54vw;
       margin: 0 0 0 0;
       display: block;
       user-select: none;
-      /* Новый яркий стиль: белое свечение и коричнево-серая тень */
-      filter:
-        drop-shadow(0 0 48px #fff)           /* БОЛЕЕ яркое белое свечение */
+      /* filter убираем отсюда! */
+      /* Никаких рамок или box-shadow тут нет */
     }
-    /* ========== /ИЗМЕНЕНИЯ ========== */
 
     .footer-links {
       color: #fff;
@@ -153,28 +158,30 @@
       margin-right: 6px;
     }
     @media (max-width: 600px) {
-  .page-content {
-    max-width: 99vw;
-    padding: 5vw 3vw 4vw 3vw;
-    margin: 18px 0 5vw 0;
-    min-height: unset;
-    overflow: visible;           /* ← ДАЁМ фильтру выйти за края */
-  }
-  .big-title { font-size: 1.22em; }
-  .wizard-box {
-    justify-content: flex-end;
-    margin-top: 7vw;
-    min-height: 50vw;            /* ↑ место для тени! */
-    overflow: visible;           /* ← ещё раз тут */
-  }
-  .wizard-img {
-    width: 49vw;
-    max-width: 60vw;             /* ← чуть больше свободы */
-    display: block;
-    filter: drop-shadow(0 0 48px #fff) 
-    /* ↑ можно усилить свечение, если хочется — как на ПК */
-  }
-  .footer-links { font-size: 0.95em; }
+      .page-content {
+        max-width: 99vw;
+        padding: 5vw 3vw 4vw 3vw;
+        margin: 18px 0 5vw 0;
+        min-height: unset;
+        overflow: visible;
+      }
+      .big-title { font-size: 1.22em; }
+      .wizard-box {
+        justify-content: flex-end;
+        margin-top: 7vw;
+        min-height: 50vw;
+        overflow: visible;
+      }
+      .wizard-img-wrap {
+        /* Тот же фильтр: и белое свечение, и серая тень */
+        filter: drop-shadow(0 0 48px #fff) drop-shadow(0 14px 48px #a68e79cc);
+      }
+      .wizard-img {
+        width: 49vw;
+        max-width: 60vw;
+        display: block;
+      }
+      .footer-links { font-size: 0.95em; }
     }
   </style>
 </head>
@@ -217,11 +224,13 @@
       Бот не получает доступ к вашему паролю.<br>
       Ваши данные в безопасности
     </div>
-    <!-- ========== ИЗМЕНЕНИЯ: обёртка и стиль для волшебника ========== -->
+    <!-- ========== ИЗМЕНЕНО: обёртка для волшебника ========== -->
     <div class="wizard-box">
-      <img class="wizard-img" src="/wizard 2.png" alt="Волшебник Альтаир">
+      <div class="wizard-img-wrap">
+        <img class="wizard-img" src="/wizard 2.png" alt="Волшебник Альтаир">
+      </div>
     </div>
-    <!-- ========== /ИЗМЕНЕНИЯ ========== -->
+    <!-- ========== /ИЗМЕНЕНО ========== -->
     <div class="footer-links">
       <a href="https://api.fokusnikaltair.xyz/privacy.html" target="_blank">Политика конфиденциальности</a><br>
       Связь с магистром: <a href="mailto:altair93055@gmail.com">altair93055@gmail.com</a>

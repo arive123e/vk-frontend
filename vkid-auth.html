@@ -62,14 +62,17 @@
       min-height: 80vh;
     }
     .big-title {
-      color: #fff;
-      font-size: 2.1em;
-      font-weight: 700;
-      margin-bottom: 17px;
-      margin-top: 18px;
-      line-height: 1.15;
-      text-align: center;
-      text-shadow: 0 2px 24px #522a8f33;
+  color: #fff;
+  font-size: 2.7em;
+  font-weight: 700;
+  margin-bottom: 17px;
+  margin-top: 18px;
+  line-height: 1.15;
+  text-align: left;
+  align-self: flex-start;
+  margin-left: 40px;           /* ← регулируй здесь! */
+  text-shadow: 0 2px 24px #522a8f33;
+  max-width: 90%; 
     }
     .subtitle {
       color: #fff;
@@ -178,7 +181,11 @@
         min-height: unset;
         overflow: visible;
       }
-      .big-title { font-size: 1.22em; }
+      @media (max-width: 600px) {
+     .big-title {
+        font-size: 1.5em;
+        margin-left: 18px;
+      }
       .wizard-box {
         justify-content: flex-end;
         margin-top: 7vw;

@@ -189,10 +189,27 @@
       margin-left: 35px;      
       margin-bottom: 22px;      /* чуть больше отступ после этой строки */
     }
-    .vk-btn {
-      margin-right: 87px;   /* столько же, сколько у .subtitle — чтобы выровнять */
-      display: block;      /* чтобы margin-left работал правильно */
-      text-align: left; 
+      .vk-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    font-weight: 600 !important;
+    font-size: 1.08em !important;
+    margin-left: 0 !important;  /* ← подвинь вправо сколько нужно */
+    margin-right: 87px !important;
+    margin-top: 14px;
+    margin-bottom: 20px;
+    padding: 0 18px;
+    min-width: 0;
+    text-align: left;
+  }
+  .vk-btn img {
+    margin-right: 12px !important;
+    margin-left: 0 !important;
+    width: 32px !important;
+    height: 32px !important;
+    align-self: center;
+  } 
       .wizard-box {
         justify-content: flex-end;
         margin-top: 7vw;

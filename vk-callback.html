@@ -49,7 +49,12 @@
           body: JSON.stringify({ code, state, device_id, code_verifier })
         });
         const text = await response.text();
-        document.getElementById('status').innerHTML = text || "Авторизация завершена!";
+        if (text.includes('Успешно') || text.includes('Можно закрыть')) {
+  window.location.replace('/success.html');
+} else {
+  window.location.replace('/error.html');
+}
+
         // Удаляем code_verifier из sessionStorage после успешной попытки
         sessionStorage.removeItem('code_verifier');
       } catch (e) {
